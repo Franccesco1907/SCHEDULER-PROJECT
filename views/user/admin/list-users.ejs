@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+
+<head>
+  <%- include('../../partials/head', {title: 'Listado de usuarios'}); %>
+  <link rel="stylesheet" href="/assets/plugins/jquery-datatable/dataTables.bootstrap4.min.css" />
+
+  <link rel="stylesheet" href="/assets/plugins/dropzone/dropzone.css">
+  <link href="/assets/plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
+
+  <link rel="stylesheet" href="../assets/plugins/ion-rangeslider/css/ion.rangeSlider.css" />
+  <link rel="stylesheet" href="../assets/plugins/ion-rangeslider/css/ion.rangeSlider.skinFlat.css" />
+  <script src="https://kit.fontawesome.com/c1c34b92ef.js" crossorigin="anonymous"></script>
+
+  <link rel="stylesheet" href="/assets/plugins/select2/select2.css" />
+  <link rel="stylesheet" href="/assets/plugins/sweetalert/sweetalert.css" />
+  <link rel="stylesheet" href="/light/assets/css/main.css">
+
+
+  <style>
+    .person-selected {
+      background-color: #fff8b5 !important;
+    }
+
+    /* Chrome, Safari, Edge, Opera */
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    /* Firefox */
+    input[type="number"] {
+      -moz-appearance: textfield;
+    }
+
+    .modal {
+      /* padding-top: 250px !important; */
+    }
+  </style>
+</head>
+
+<body class="theme-purple">
+  <%- include('../../partials/app/header') %>
+  <%- include('../../partials/app/topbar'); %>
+  <%- include('../../partials/app/leftsidebar', {user}); %>
+
+  <section class="content">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-lg-7 col-md-6 col-sm-12">
+          <h2>
+            Gestión de usuarios
+            <small>Listado de usuarios</small>
+          </h2>
+        </div>
+        <div class="col-lg-5 col-md-6 col-sm-12">
+          <ul class="breadcrumb float-md-right">
+            <li class="breadcrumb-item">
+              <a href="/"><i class="zmdi zmdi-home"></i>App</a>
+            </li>
+            <li class="breadcrumb-item"><a href="/">Gestión de usuarios</a></li>
+            <li class="breadcrumb-item active">Lista de usuarios</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-fluid">
+      <!-- Exportable Table -->
+      <div class="row clearfix">
+        <div class="col-lg-12">
+          <div class="card">
+            <div class="header">
+              <!-- change semester later -->
+              <h2><strong>Listado de Usuarios </strong></h2>
+            </div>
+
+            <div class="body">
+
+              <div class="row clearfix pb-0 ">
+
+                <div class="col-lg-4 col-md-6">
+                  Nombre o codigo del usuario:
+                  <div class="input-group">
+                    <span class="input-group-addon">
+                    </span>
+                    <input type="text" class="form-control" id="nombre" />
+                  </div>
+                </div>
+
+                <div class="col-md-4">
+                  <label class="mb-1" for="role">Rol</label>
+                  <select class="form-control show-tick ms select2" name="role" id="role" data-placeholder="Seleccione un Rol" style="height: 38px !important;" required>
+                    <option value="TODOS">TODOS</option>
+                    <% for (let role of roles ) { %>
+                      <% if (role.nombre !=="PERSONA_EXTERNA" ) { %>
+                    <option value="<%= role.idRol %>">
+                      <%= role.nombre.replace('_',' ') %>
+                    </option>
+                      <% } %>
+                  <% } %>
+                  </select>
+                </div>
+
+                <div class="col-md-4">
+                  <label class="mb-1" for="department">Departamento </label>
+                  <select class="form-control show-tick ms select2" name="department" id="department" data-placeholder="Seleccione un Departamento" style="height: 38px !important;" required>
+                    <option value="TODOS">TODOS</option>
+                    <% for (let department of departments ) { %>
+                    <option value="<%= department.idDepartamento %>">
+                      <%= department.nombre %>
+                    </option>
+                    <% } %>
+                  </select>
+                </div>
+
+              </div>
+
+              <div class="row pt-2 blocks">
+                <div class="col-sm-12  d-inline-block">
+
+                  <div class="row pt-2 blocks">
+                    <div class="col-sm-12">
+
+                      <button type="button" id="btn-carga-masiva" class="btn btn-primary waves-effect" data-color-name="alert-warning" data-toggle="modal" data-target="#loadMasiveDataModal">
+                        Carga masiva
+                      </button>
+
+                      <div class="float-right">
+                        <button id="delete-user-modal" type="button" class="btn btn-danger waves-effect" data-color-name="alert-warning">
+                          Eliminar
+                        </button>
+
+                        <button id="edit-user-modal" type="button" class="btn btn-info">
+                          Editar
+                        </button>
+
+                        <a type="button" class="btn btn-primary waves-effect" href="/admin/register-user">
+                          Agregar </a>
+                        </a>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+              <div class="table-responsive">
+                <table id="users-data-table" class="
+                  table table-bordered table-striped table-hover
+                  dataTable
+                  js-exportable 
+                ">
+                  <thead style="background-color: #167bc3; color:white">
+                    <tr>
+                      <th>Nombre Completo</th>
+                      <th>Correo</th>
+                      <th>Rol</th>
+                      <th>Departamento</th>
+                      <th>Seccion</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- users have to be replace with requests -->
+                  </tbody>
+                </table>
+
+              </div>
+
+
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+    </div>
+    </div>
+    </div>
+    <!-- #END# Exportable Table -->
+    </div>
+  </section>
+
+  <!--Editar el ROL-->
+  <button id="activate-editRol-modal" data-toggle="modal" data-target="#editRolModal" style="display: none;">
+  </button>
+
+  <div class="modal fade show" id="editRolModal" tabindex="-1" role="dialog" style="display: none;" aria-modal="true">
+    <div class="modal-dialog modal-sm" role="document">
+      <div class="modal-content">
+        <div class="modal-header" style="background-color: #167bc3;">
+          <h4 class="title pt-10 text-white">Editar rol del usuario</h4>
+        </div>
+        <div class="modal-body">
+          <div id="user-selected">
+            <label class="mb-1" for="role">Seleccione el Rol a asignar</label>
+            <select class="form-control show-tick ms select2" name="role" id="rolSelected" data-placeholder="Seleccione un Rol" style="height: 38px !important;" required>
+              <option></option>
+              <% for (let role of roles ) { %>
+              <option value="<%= role.idRol %>">
+                <%= role.nombre %>
+              </option>
+              <% } %>
+            </select>
+          </div>
+          <div id="user-no-selected">
+            <div class="text-center">
+              Usted no ha seleccionado ningún usuario
+            </div>
+            <hr class="mt-2 mb-0">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <div class="float-left">
+            <button id="close-edit-roles-modal" class="btn btn-danger btn-round waves-effect justify-content-center" data-dismiss="modal">
+              Cancelar
+            </button>
+          </div>
+
+          <div class="float-right">
+            <button id="edit-roles" class="btn btn-primary btn-round waves-effect justify-content-center">
+              Confirmar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Modal -->
+  <div class="modal fade show" id="editApplicationHoursModal" tabindex="-1" role="dialog" style="display: none;" aria-modal="true">
+    <div class="modal-dialog modal-sm" role="document">
+      <div class="modal-content">
+        <div class="modal-header bg-red">
+          <h4 class="title pt-10">Editar solicitud de descarga</h4>
+        </div>
+        <div class="modal-body"></div>
+        <div class="modal-footer">
+          <div class="float-left">
+            <button id="close-edit-application-hours" class="btn btn-danger btn-round waves-effect justify-content-center" data-dismiss="modal">
+              Cancelar
+            </button>
+          </div>
+
+          <div class="float-right">
+            <button id="edit-application-hours" class="btn btn-primary btn-round waves-effect justify-content-center">
+              Confirmar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Export to Excel -->
+  <div class="modal fade show" id="loadMasiveDataModal" tabindex="-1" role="dialog" aria-modal="true" style="display: none;">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header" style="background-color: #167bc3;">
+          <h4 class="title text-white">Carga Masiva de Usuarios</h4>
+        </div>
+        <div class="modal-body">
+
+          <div class="row">
+            <div class="col-lg-12 pb-3">
+              <a type="button" class="btn btn-round waves-effect g-bg-cgreen text-white" href="/files/Formato-Usuarios.xlsx">
+                Descargar Formato en Excel
+                <i class="fas fa-download pl-2"></i>
+              </a>
+            </div>
+
+            <div class="col-lg-12">
+              <form id="upload-users" method="post" class="dropzone">
+                <input type="hidden" name="_csrf" id="csrf" value="<%= csrfToken %>" />
+              </form>
+            </div>
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <div class="float-left">
+            <button id="close-load-massive-modal" class="btn btn-danger btn-round
+                      waves-effect" data-dismiss="modal">
+              Cancelar
+            </button>
+          </div>
+
+          <div class="float-right">
+            <button id="load-data-users" class="
+                      btn btn-primary btn-round
+                      waves-effect
+                    ">
+              Cargar Archivo
+
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Tabla to Excel -->
+  <div class="modal fade show" id="previewDataModal" tabindex="-1" role="dialog" aria-modal="true" style="display: none;">
+    <div class="modal-dialog modal-xl" role="document">
+      <div class="modal-content">
+        <div class="modal-header" style="background-color: #167bc3;">
+          <h4 class="title text-white">Vista Previa de Usuarios</h4>
+        </div>
+        <div class="modal-body">
+          <div class="table-responsive">
+            <table class="table table-bordered table-striped table-hover js-basic-example dataTable" id="table-users-preview">
+              <thead style="background-color: #167bc3; color:white">
+                <tr>
+                  <th>Departamento</th>
+                  <th>Nombre completo</th>
+                  <th>Sexo</th>
+                  <th>Correo</th>
+                  <th>Rol</th>
+                </tr>
+              </thead>
+              <tbody id="users-loaded">
+              </tbody>
+            </table>
+          </div>
+          <div id="errors" class="pt-3"></div>
+        </div>
+        <div class="modal-footer">
+          <div class="float-left">
+            <button id="close-preview-users-modal" class="btn btn-danger btn-round
+                      waves-effect" data-dismiss="modal">
+              Cancelar
+            </button>
+          </div>
+
+          <div class="float-right">
+            <button id="load-users-massive" class="
+                      btn btn-primary btn-round
+                      waves-effect
+                    ">
+              Cargar usuarios
+              <i class="fas fa-file-upload pl-2"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <button id="open-preview-modal" data-toggle="modal" data-target="#previewDataModal" style="display: none;">
+  </button>
+
+
+  <!--ELIMINAR PERSONA-->
+  <button id="activate-delete-modal" data-toggle="modal" data-target="#deleteUserModal" style="display: none;">
+  </button>
+
+  <div class="modal fade show" id="deleteUserModal" tabindex="-1" role="dialog" style="display: none;" aria-modal="true">
+    <div class="modal-dialog modal-sm" role="document">
+      <div class="modal-content">
+        <div class="modal-header bg-red">
+          <h4 class="title pt-10">Eliminar Usuario</h4>
+        </div>
+        <div class="modal-body">
+          <div class="text-center">
+            ¿Está seguro de eliminar este usuario?
+          </div>
+        </div>
+        <div class="modal-footer">
+          <div class="float-left">
+            <button id="close-delete-request-modal" class="btn btn-danger btn-round waves-effect justify-content-center close-selected" data-dismiss="modal">
+              Cancelar
+            </button>
+          </div>
+
+          <div class="float-right">
+            <button id="delete-request" class="btn btn-primary btn-round waves-effect justify-content-center">
+              Eliminar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <button id="success-delete-user" class="btn btn-raised btn-primary waves-effect btn-round" data-type="success" style="display: none;">CLICK ME
+  </button>
+
+  <%- include('../../partials/app/scripts', {view: 'sb-list-users'}); %>
+
+  <!-- Jquery DataTable Plugin Js -->
+  <script src="/light/assets/bundles/datatablescripts.bundle.js"></script>
+  <script src="/assets/plugins/jquery-datatable/buttons/dataTables.buttons.min.js"></script>
+  <script src="/assets/plugins/jquery-datatable/buttons/buttons.bootstrap4.min.js"></script>
+  <script src="/assets/plugins/jquery-datatable/buttons/buttons.colVis.min.js"></script>
+  <script src="/assets/plugins/jquery-datatable/buttons/buttons.html5.min.js"></script>
+  <script src="/assets/plugins/jquery-datatable/buttons/buttons.print.min.js"></script>
+
+  <script src="/assets/plugins/bootstrap-notify/bootstrap-notify.js"></script>
+  <script src="/assets/plugins/select2/select2.min.js"></script>
+  <script src="/light/assets/bundles/mainscripts.bundle.js"></script>
+  <script src="/assets/plugins/ion-rangeslider/js/ion.rangeSlider.js"></script> <!-- RangeSlider Plugin Js -->
+  <script src="/assets/plugins/dropzone/dropzone.js"></script>
+  <script src="/assets/plugins/sweetalert/sweetalert.min.js"></script>
+
+  <script>
+    var jwt = "<%= jwt %>";
+    var users = JSON.parse(`<%-JSON.stringify(users)%>`);
+    var departments = JSON.parse(`<%-JSON.stringify(departments)%>`);
+  </script>
+
+  <script src="/js/user/admin/list-users.js" type="module"></script>
+
+</body>
+
+</html>

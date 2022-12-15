@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+  <head>
+    <%- include('../partials/head', {title: 'Registro de Docentes'}); %>
+    <link
+    rel="stylesheet"
+    href="/assets/plugins/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css"
+  />
+    <link rel="stylesheet" href="/assets/plugins/sweetalert/sweetalert.css" />
+    <link rel="stylesheet" href="/assets/plugins/dropzone/dropzone.css" />
+    <link rel="stylesheet" href="/assets/plugins/bootstrap-select/css/bootstrap-select.css"/>
+    <script
+      src="https://kit.fontawesome.com/c1c34b92ef.js"
+      crossorigin="anonymous"
+    ></script>
+
+
+    <style>
+      .professor-selected {
+        background-color: #fff8b5 !important;
+      }
+
+      .modal {
+        padding-top: 50px !important;
+      }
+
+      #table-professor-preview thead th,
+      #table-professor-preview thead td {
+        padding: 8px 10px;
+        /* e.g. change 8x to 4px here */
+      }
+
+      #table-professor-preview tbody th,
+      #table-professor-preview tbody td {
+        padding: 4px 10px;
+        /* e.g. change 8x to 4px here */
+      }
+    </style>
+  </head>
+
+  <body class="theme-purple">
+    <%- include('../partials/app/header') %> <%-
+    include('../partials/app/topbar'); %> <%-
+    include('../partials/app/leftsidebar', {user}); %>
+
+    <section class="content">
+      <div class="block-header">
+        <div class="row">
+          <div class="col-lg-7 col-md-6 col-sm-12">
+            <h2>
+              Docentes
+              <small>Listado de Docentes</small>
+            </h2>
+          </div>
+          <div class="col-lg-5 col-md-6 col-sm-12">
+            <ul class="breadcrumb float-md-right">
+              <li class="breadcrumb-item">
+                <a href="/"><i class="zmdi zmdi-home"></i>App</a>
+              </li>
+              <li class="breadcrumb-item"><a href="/">Docentes</a></li>
+              <li class="breadcrumb-item active">Registro de Docentes</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="container-fluid">
+        <!-- Exportable Table -->
+        <div class="row clearfix">
+          <div class="col-lg-12">
+            <div class="card">
+              <div class="body">
+                <div class="row clearfix pb-0"> 
+                  <div class="col-lg-6 col-md-6">                      
+                    <b>Código PUCP<span class="required-field">*</span></b>
+                    <div class="form-group col-lg-10 pl-0">
+                      <input
+                        type="text"
+                        class="form-control"
+                        placeholder=""
+                        id="code"
+                      />
+                    </div>
+                        <b>Nombres <span class="required-field">*</span></b>
+                        <div class="form-group">
+                        <input
+                          type="text"
+                          class="form-control"
+                          placeholder=""
+                          id="name"
+                        />
+                      </div>
+                      
+                      <b>Apellido Paterno <span class="required-field">*</span></b>
+                      <div class="form-group">
+                          <input
+                            type="text"
+                            class="form-control"
+                            placeholder=""
+                            id="last-name-1"
+                          />
+                        </div>
+                        
+                        <b>Apellido Materno <span class="required-field">*</span></b>
+                        <div class="form-group">
+                            <input
+                              type="text"
+                              class="form-control"
+                              placeholder=""
+                              id="last-name-2"
+                            />
+                          </div>
+
+                        <div class="">
+                          <b for="date-create"
+                            >Fecha de creación
+                            <span class="required-field">*</span></b>
+                          <div class="input-group">
+                            <span class="input-group-addon">
+                              <i class="zmdi zmdi-calendar"></i>
+                            </span>
+                            <input
+                              type="text"
+                              class="form-control date"
+                              id="birthday"
+                              placeholder="Elija la fecha de creación"
+                              data-dtp="dtp_wghlr"
+                              required
+                            />
+                          </div>
+                      </div>
+
+
+                        <div class="form-group"> <b>Teléfono Celular</b>
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="zmdi zmdi-phone"></i></span>
+                                <input type="tel" class="form-control mobile-phone-number" placeholder="Ex: +00 000-00-00" id="cellphone">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <b>Sexo</b>
+                            <br>
+                            <div class="radio inlineblock m-r-20">
+                                <input type="radio" name="gender" id="male" class="with-gap" value="masculino">
+                                <label for="male">Masculino</label>
+                            </div>                                
+                            <div class="radio inlineblock">
+                                <input type="radio" name="gender" id="Female" class="with-gap" value="femenino" checked="">
+                                <label for="Female">Femenino</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                          <b>Tipo de Documento<span class="required-field">*</span></b>
+                          <select class="form-control show-tick" id="documentType" >
+                              <option value="DNI">DNI</option>
+                              <option value="PASAPORTE">PASAPORTE</option>
+                              <option value="CARNET_EXTRANJERIA">CARNET DE EXTRANJERIA</option>
+                              
+                          </select>
+                      </div>
+
+                        <b>Numero de Documento <span class="required-field">*</span></b>
+                        <div class="form-group">
+                            <input
+                              type="text"
+                              class="form-control"
+                              placeholder=""
+                              id="IDdocument"
+                            />
+                          </div>
+                          
+
+                  </div>
+
+                <div class="col-lg-6 col-md-6">        
+                  
+                  <b>Dirección</b>
+                          <div class="form-group col-lg-10 pl-0">
+                            <input
+                              type="text"
+                              class="form-control"
+                              placeholder=""
+                              id="address"
+                            />
+                    <b>Sección <span class="required-field">*</span></b>
+                    <select class="form-control show-tick" id="section">
+                     <% for (let section of sections){%>
+                       <option value="<%= section.idSeccion %>">
+                         <%= section.nombre %>
+                       </option>
+                       <% } %>
+                   </select> 
+                   <b>Categoria <span class="required-field">*</span></b>
+                     <select class="form-control show-tick" id="category">
+                      <option value="PRINCIPAL">PRINCIPAL</option>
+                      <option value="ASOCIADO">ASOCIADO</option>
+                      <option value="AUXILIAR">AUXILIAR</option>
+                      <option value="CONTRATADO">CONTRATADO</option>
+                      <option value="EXTRAORDINARIO">EXTRAORDINARIO</option> 
+                    </select> 
+                    <b>Dedicación <span class="required-field">*</span></b>
+                     <select class="form-control show-tick" id="dedication">
+                      <option value="TC">TC</option>
+                      <option value="TPC">TPC</option>
+                      <option value="TPA">TPA</option>
+                    </select>
+                    <div class=""> <b>Correo Electronico</b>
+                      <div class="input-group">
+                          <span class="input-group-addon"><i class="zmdi zmdi-email"></i></span>
+                          <input type="text" class="form-control email" placeholder="Ex: example@example.com" id="email">
+                      </div>
+                  </div>
+
+
+                </div>
+                
+
+                
+                </div>
+                
+                <div class="row col-lg-12 "> 
+                    <div class="col-lg-12 ">
+                        <div class="float-right">
+                            <a class="btn btn-danger" type="button" href="/department-assistant/list-professor" id="cancel">Cancelar</a>    
+                            <button class="btn btn-primary" id="save-professor">Registrar</button>    
+                        </div>
+                            
+                    </div>
+                
+                </div>
+
+
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- #END# Exportable Table -->
+      </div>
+
+
+ 
+
+
+    </section>
+
+ 
+
+
+
+
+
+    <%- include('../partials/app/scripts', {view: 'sb-register-professor'}); %>
+
+    <!-- Jquery DataTable Plugin Js -->
+    <script src="/assets/plugins/bootstrap-notify/bootstrap-notify.js"></script>
+    <script src="/light/assets/bundles/mainscripts.bundle.js"></script>
+    <script src="/assets/plugins/dropzone/dropzone.js"></script>
+    <script src="../assets/plugins/momentjs/moment.js"></script>
+    <script src="/assets/plugins/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js"></script>
+    <script src="/assets/plugins/sweetalert/sweetalert.min.js"></script>
+    <script>
+           var sections = JSON.parse('<%-JSON.stringify(sections)%>');
+            var usuario=JSON.parse('<%-JSON.stringify(user)%>');
+            var professor=JSON.parse('<%-JSON.stringify(person)%>');
+            var edit=JSON.parse('<%-JSON.stringify(edit)%>');
+            var jwt = "<%= jwt %>";
+    </script>
+
+    <script src="/js/department-assistant/edit-professor.js" type="module"></script>
+  </body>
+</html>

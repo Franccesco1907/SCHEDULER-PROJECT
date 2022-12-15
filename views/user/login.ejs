@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+  <head>
+    <%- include('../partials/head', {title: 'Inicio de Sesión'}); %>
+    <link rel="stylesheet" href="/light/assets/css/authentication.css" />
+    <script
+      src="https://kit.fontawesome.com/c1c34b92ef.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <body class="theme-purple authentication sidebar-collapse">
+    <div class="page-header">
+      <%- include('../partials/login/navbar'); %>
+
+      <div
+        class="page-header-image"
+        style="background-image: url(/assets/images/login.jpg)"
+      ></div>
+      <div class="container">
+        <div class="col-md-12 content-center">
+          <div class="card-plain">
+            <div class="header">
+              <div class="logo-container">
+                <img src="/images/logo.png" alt="PUCP" />
+              </div>
+              <h5>¡Bienvenido al Sistema de Departamentos PUCP!</h5>
+            </div>
+
+            <% if( error != "" ){ %>
+            <div class="alert alert-danger" role="alert">
+              <div class="container p-0">
+                <i class="fas fa-exclamation-triangle"></i>
+                <strong>ERROR:</strong> <%= error %>
+                <button
+                  type="button"
+                  class="close"
+                  data-dismiss="alert"
+                  aria-label="Close"
+                >
+                  <span aria-hidden="true">
+                    <i class="zmdi zmdi-close"></i>
+                  </span>
+                </button>
+              </div>
+            </div>
+            <% } %> 
+            
+            <% if( error_messages != "" ){ %>
+            <div class="alert alert-danger" role="alert">
+              <div class="container">
+                <div class="alert-icon">
+                  <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <%= error_messages %>
+                <button
+                  type="button"
+                  class="close"
+                  data-dismiss="alert"
+                  aria-label="Close"
+                >
+                  <span aria-hidden="true">
+                    <i class="zmdi zmdi-close"></i>
+                  </span>
+                </button>
+              </div>
+            </div>
+            <% } %>
+
+            <div class="content">
+              <form action="/user/login" method="POST">
+                <input
+                  type="hidden"
+                  name="_csrf"
+                  id="csrf"
+                  value="<%= csrfToken %>"
+                />
+                <div class="input-group input-lg">
+                  <input
+                    type="text"
+                    class="form-control"
+                    name="email"
+                    placeholder="Ingrese Correo PUCP"
+                    required
+                  />
+                  <span class="input-group-addon">
+                    <i class="zmdi zmdi-account-circle"></i>
+                  </span>
+                </div>
+                <div class="input-group input-lg">
+                  <input
+                    type="password"
+                    class="form-control"
+                    name="password"
+                    placeholder="Contraseña"
+                    autocomplete="off"
+                    required
+                  />
+                  <span class="input-group-addon">
+                    <i class="zmdi zmdi-lock"></i>
+                  </span>
+                </div>
+                <div class="footer text-center">
+                  <input
+                    type="submit"
+                    value="Ingresar"
+                    class="btn btn-round btn-lg btn-block"
+                    style="background-color: #2ca8ff"
+                  />
+                  o
+                  <a
+                    href="/user/google"
+                    class="btn btn-primary btn-round btn-lg btn-block"
+                    >Ingresar con Google<i class="fab fa-google ml-2"></i
+                  ></a>
+                  <h5>
+                    <a href="/user/forgot-password" class="link"
+                      ><u>¿Olvidaste tu contraseña?</u></a
+                    >
+                  </h5>
+                  <a
+                    href="/guest"
+                    class="btn btn-default btn-round btn-lg btn-block"
+                    >Ingresar como Invitado<i class="fas fa-user-clock ml-2"></i
+                  ></a>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <%- include('../partials/footer'); %>
+    </div>
+
+    <script src="/light/assets/bundles/libscripts.bundle.js"></script>
+    <script src="/light/assets/bundles/vendorscripts.bundle.js"></script>
+    <script src="/light/assets/bundles/mainscripts.bundle.js"></script>
+
+    <script>
+      $(".navbar-toggler").on("click", function () {
+        $("html").toggleClass("nav-open");
+      });
+
+      $(".form-control")
+        .on("focus", function () {
+          $(this).parent(".input-group").addClass("input-group-focus");
+        })
+        .on("blur", function () {
+          $(this).parent(".input-group").removeClass("input-group-focus");
+        });
+    </script>
+  </body>
+</html>

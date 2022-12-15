@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+
+<head>
+  <%- include('../partials/head', {title: 'Inicio'}); %>
+  <link rel="stylesheet" href="/assets/plugins/morrisjs/morris.min.css" />
+  <style>
+    #main-body {
+      background-image: url("/images/campus3.jfif");
+      max-width: auto;
+      max-height: auto;
+      width: auto;
+      height: 460px;
+    }
+  </style>
+</head>
+
+<body class="theme-purple">
+  <%- include('../partials/app/header') %>
+  <%- include('../partials/app/topbar'); %>
+  <%- include('../partials/app/leftsidebar', {user}); %>
+
+  <section class="content home">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-lg-5 col-md-5 col-sm-12">
+          <h2>
+            Inicio
+            <small>¡Bienvenido al Sistema de Departamentos PUCP!</small>
+          </h2>
+        </div>
+        <div class="col-lg-7 col-md-7 col-sm-12 text-right">
+          </button>
+          <ul class="breadcrumb float-md-right">
+            <li class="breadcrumb-item">
+              <a href="/"><i class="zmdi zmdi-home"></i>App</a>
+            </li>
+            <li class="breadcrumb-item active">Inicio</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="container-fluid" id="main-body">
+
+      <div class="row clearfix">
+        <div class="col-lg-12 col-md-12">
+          <div class="row clearfix">
+            <div class="col-lg-12">
+              <div class="card">
+                <ul class="row profile_state list-unstyled">
+                  <li class="col-lg-3 col-md-3 col-6">
+                    <div class="body">
+                      <i class="zmdi zmdi-account col-amber"></i>
+                      <h4>Registro de Usuarios</h4>
+                      <span>Para que hagan uso de las funcionalidades</span>
+                    </div>
+                  </li>
+                  <li class="col-lg-3 col-md-3 col-6">
+                    <div class="body">
+                      <i class="zmdi zmdi-assignment col-blue"></i>
+                      <h4>Envío de Solicitudes</h4>
+                      <span>A Mesa de Partes de cada Departamento</span>
+                    </div>
+                  </li>
+                  <li class="col-lg-3 col-md-3 col-6">
+                    <div class="body">
+                      <i class="zmdi zmdi-apps col-red"></i>
+                      <h4>Gestión de Datos</h4>
+                      <span>De Toda la Universidad</span>
+                    </div>
+                  </li>
+                  <li class="col-lg-3 col-md-3 col-6">
+                    <div class="body">
+                      <i class="material-icons text-success pt-0 pb-0 mb-0">people</i>
+                      <h4>Visualiza el perfil de todos</h4>
+                      <span>Los Profesores y Académicos</span>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="row clearfix">
+        <!--
+        <div class="col-lg-8 col-md-12">
+          <div class="row clearfix social-widget">
+            <div class="col-lg-4 col-md-4">
+              <div class="card info-box-2 hover-zoom-effect instagram-widget">
+                <div class="icon"><i class="zmdi zmdi-instagram"></i></div>
+                <div class="content">
+                  <div class="text">Siguenos</div>
+                  <div class="number">231</div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-4 col-md-4">
+              <div class="card info-box-2 hover-zoom-effect linkedin-widget">
+                <div class="icon"><i class="zmdi zmdi-linkedin"></i></div>
+                <div class="content">
+                  <div class="text">Siguenos</div>
+                  <div class="number">2510</div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-4 col-md-4">
+              <div class="card info-box-2 hover-zoom-effect facebook-widget">
+                <div class="icon"><i class="zmdi zmdi-facebook"></i></div>
+                <div class="content">
+                  <div class="text">Siguenos</div>
+                  <div class="number">121</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        -->
+        <!--
+        <div class="col-lg-3 col-md-12">
+          <div class="card weather2">
+            <div class="city-selected body l-khaki">
+              <div class="row">
+                <div class="col-12">
+                  <div class="city"><span>Lugar: </span>PUCP</div>
+                  <div class="night" id="time"></div>
+                </div>
+                <div class="info col-8">
+                  <div class="temp">
+                    <h2>28°</h2>
+                  </div>
+                </div>
+                <div class="icon col-4">
+                  <img src="/assets/images/weather/summer.svg" alt="" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        -->
+      </div>
+    </div>
+  </section>
+
+  <%- include('../partials/app/scripts', {view: 'sb-home'}); %>
+
+  <script src="/light/assets/bundles/mainscripts.bundle.js"></script>
+
+  <script src="/js/app/index.js"></script>
+
+</body>
+
+</html>

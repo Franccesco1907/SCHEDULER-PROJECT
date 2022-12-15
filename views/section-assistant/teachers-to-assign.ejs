@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+
+<head>
+  <%- include('../partials/head', {title: 'Docentes a Asignar'}); %>
+  <link rel="stylesheet" href="/assets/plugins/jquery-datatable/dataTables.bootstrap4.min.css" />
+
+  <link rel="stylesheet" href="/assets/plugins/dropzone/dropzone.css">
+
+  <script src="https://kit.fontawesome.com/c1c34b92ef.js" crossorigin="anonymous"></script>
+
+  <link rel="stylesheet" href="/assets/plugins/sweetalert/sweetalert.css" />
+
+  <link rel="stylesheet" href="/assets/plugins/bootstrap-select/css/bootstrap-select.css" />
+
+  <link rel="stylesheet" href="/assets/plugins/bootstrap-tagsinput/bootstrap-tagsinput.css">
+
+  <!-- <link rel="stylesheet" href="/assets/plugins/select2/select2.css" /> -->
+
+  <style>
+    .teacher-no-assigned-selected {
+      background-color: #FFF8B5 !important;
+    }
+
+    .teacher-assigned-selected {
+      background-color: #FFF8B5 !important;
+    }
+
+    .modal {
+      /*padding-top: 50px !important;*/
+    }
+
+    #table-courses-preview thead th,
+    #table-courses-preview thead td {
+      padding: 8px 10px;
+      /* e.g. change 8x to 4px here */
+    }
+
+    #table-courses-preview tbody th,
+    #table-courses-preview tbody td {
+      padding: 4px 10px;
+      /* e.g. change 8x to 4px here */
+    }
+  </style>
+</head>
+
+<body class="theme-purple">
+  <%- include('../partials/app/header') %>
+  <%- include('../partials/app/topbar'); %>
+  <%- include('../partials/app/leftsidebar', {user}); %>
+
+  <section class="content">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-lg-7 col-md-6 col-sm-12">
+          <h2>
+            Asignación de Docentes
+            <small>Asignación de docentes a los cursos-horarios a dictarse de la Unidad Académica en el ciclo</small>
+          </h2>
+        </div>
+        <div class="col-lg-5 col-md-6 col-sm-12">
+          <ul class="breadcrumb float-md-right">
+            <li class="breadcrumb-item">
+              <a href="/"><i class="zmdi zmdi-home"></i>App</a>
+            </li>
+            <li class="breadcrumb-item"><a href="/">Cursos</a></li>
+            <li class="breadcrumb-item active">Asignar Docente</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="container-fluid">
+      <!-- Exportable Table -->
+      <div class="row clearfix">
+        <div class="col-lg-12">
+          <div class="card">
+            <div class="header">
+              <h2><strong> <%= schedule.nombreCurso %> - <%= schedule.codigoCurso %></strong></h2>
+              <div class="float-right">
+              </div>
+              <div class="row pt-2">
+                <div class="col-sm-12">
+                  <p>Horario <%= schedule.codigo %> - <%= schedule.tipoHorario %> - Dictado <span id="label-dictation-type"><%= schedule.tipoDictado %></span> </p>
+                  <p><%= schedule.horas %>  horas semanales</p>
+                  <b>Estado: <span id="label-schedule-state"> <%= schedule.estadoHorario %> </span></b>
+                </div>
+              </div>
+            </div>
+
+            <div class="body">
+              <div class="row clearfix">
+                <div class="col-md-4 d-inline-block">
+                  <label for="dictationType">Tipo de dictado</label>
+                  <span class="required-field">*</span></label>
+                  <select class="form-control show-tick ms select2" name="dictationType" id="dictationType" data-placeholder="Seleccione un tipo de dictado" style="height: 38px !important;" required>
+                    <option value="INDIVIDUAL">INDIVIDUAL</option>
+                    <option value="CODICTADO">CODICTADO</option>
+                    <option value="COMPARTIDO">COMPARTIDO</option>
+                  </select>
+                </div>
+                <div class="row pt-2 blocks ">
+                  <div class="col-sm-12">
+                    <button id="allocate" type="button" class="btn btn-info">
+                      Asignar carga
+                    </button>
+                    <button id="deallocate" type="button" class="btn btn-danger">
+                      Desasignar carga
+                    </button>
+                  </div>
+                </div>   
+              <!-- DATATABLE IZQUIERDO -->
+                <div class="col-12 col-md-6">
+
+                  <div class="table-responsive">
+                    <table id="teachers-no-assigned-data-table" class="table table-bordered table-striped">
+                      <thead style="background-color: #167bc3; color: white">
+                        <tr>
+                          <th>Nombre del docente</th>
+                          <th>Carga docente</th>
+                          <th>Tipo</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <!-- DATATABLE DERECHO-->
+                <div class="col-12 col-md-6">
+
+                  <div class="table-responsive">
+                    <table id="teachers-assigned-data-table" class="table table-bordered table-striped">
+                      <thead style="background-color: #167bc3; color: white">
+                        <tr>
+                          <th>Nombre del docente</th>
+                          <th>Carga asignada</th>
+                          <th>Carga docente</th>
+                        </tr>
+                      </thead>
+                      <tbody></tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-12">
+                <div class="float-right" style="padding-top: 10px !important; margin-bottom: 10px;">
+                  <button id="save-assignment" class="btn btn-primary">
+                    Guardar Cambios
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- #END# Exportable Table -->
+<!--
+      <button id="success-delete-course" class="btn btn-raised btn-primary waves-effect btn-round" data-type="success">CLICK ME</button>
+-->
+    </div>
+  </section>
+
+
+
+  <%- include('../partials/app/scripts', {view: 'sb-courses-to-assign'}); %>
+
+  <!-- Jquery DataTable Plugin Js -->
+  <script src="/light/assets/bundles/datatablescripts.bundle.js"></script>
+  <script src="/assets/plugins/jquery-datatable/buttons/dataTables.buttons.min.js"></script>
+  <script src="/assets/plugins/jquery-datatable/buttons/buttons.bootstrap4.min.js"></script>
+  <script src="/assets/plugins/jquery-datatable/buttons/buttons.colVis.min.js"></script>
+  <script src="/assets/plugins/jquery-datatable/buttons/buttons.html5.min.js"></script>
+  <script src="/assets/plugins/jquery-datatable/buttons/buttons.print.min.js"></script>
+  <script src="/assets/plugins/dropzone/dropzone.js"></script>
+  <script src="/assets/plugins/bootstrap-notify/bootstrap-notify.js"></script>
+
+  <script src="/assets/plugins/sweetalert/sweetalert.min.js"></script>
+  <script src="/light/assets/bundles/mainscripts.bundle.js"></script>
+  <!-- <script src="/assets/plugins/select2/select2.min.js"></script> -->
+
+  <script>
+    var idSection = parseInt(`<%=  idSeccion%>`);
+    var idSchedule = parseInt(`<%= idSchedule %>`);
+    var schedule = JSON.parse(`<%- JSON.stringify(schedule) %>`);
+    var loadProcess = JSON.parse(`<%- JSON.stringify(loadProcess) %>`);
+    var jwt = `<%= jwt %>`;
+  </script>
+
+  <script src="/js/section-assistant/teachers-to-assign.js" type="module"></script>
+
+</body>
+
+</html>

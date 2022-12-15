@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html class="no-js" lang="es">
+
+<head>
+  <%- include('../partials/head', {title: 'Detalle de Trámite'}); %>
+  <link rel="stylesheet" href="/assets/plugins/dropzone/dropzone.css" />
+  <link rel="stylesheet" href="/assets/plugins/select2/select2.css" />
+  <link rel="stylesheet" href="/light/assets/css/main.css">
+  <link rel="stylesheet" href="/assets/plugins/sweetalert/sweetalert.css" />
+  <link rel="stylesheet" href="/light/assets/css/timeline.css">
+
+  <script src="https://kit.fontawesome.com/c1c34b92ef.js" crossorigin="anonymous"></script>
+
+  <style>
+    input[type="radio"] {
+      border: 0px;
+      width: 60%;
+      height: 2em;
+    }
+  </style>
+</head>
+
+<body class="theme-purple">
+  <%- include('../partials/app/header') %>
+  <%- include('../partials/app/topbar'); %>
+  <%- include('../partials/app/leftsidebar', {user}); %>
+
+  <section class="content">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-lg-7 col-md-6 col-sm-12">
+          <h2>Trámite
+            <small>Detalle de Trámite</small>
+          </h2>
+        </div>
+        <div class="col-lg-5 col-md-6 col-sm-12">
+          <ul class="breadcrumb float-md-right">
+            <li class="breadcrumb-item">
+              <a href="/"><i class="zmdi zmdi-home"></i>App</a>
+            </li>
+            <li class="breadcrumb-item"><a href="">Buzón</a></li>
+            <li class="breadcrumb-item active">Detalle Trámite</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-fluid">
+      <div class="row clearfix">
+        <div class="col-lg-12">
+          <div class="card">
+            <div class="header">
+              <h2><strong>Tracking de Trámite</strong></h2>
+            </div>
+            <div class="body">
+              <ul class="cbp_tmtimeline" id="tracking">
+
+              </ul>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <%- include('../partials/app/scripts', {view: ''}); %>
+
+  <script src="/assets/plugins/bootstrap-notify/bootstrap-notify.js"></script>
+  <script src="/assets/plugins/dropzone/dropzone.js"></script>
+  <script src="/assets/plugins/select2/select2.min.js"></script>
+  <script src="/assets/plugins/momentjs/moment.js"></script>
+  <script src="/assets/plugins/sweetalert/sweetalert.min.js"></script>
+  <script src="/light/assets/bundles/mainscripts.bundle.js"></script>
+
+  <script>
+    var request = JSON.parse(`<%- JSON.stringify(request) %>`);
+    var user = JSON.parse(`<%- JSON.stringify(user) %>`);
+  </script>
+
+  <script src="/js/guest/view-request.js" type="module"></script>
+</body>
+
+</html>

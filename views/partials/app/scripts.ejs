@@ -1,0 +1,11 @@
+<script src="/light/assets/bundles/libscripts.bundle.js"></script>
+<script src="/light/assets/bundles/vendorscripts.bundle.js"></script>
+
+<script>
+  let view = "<%= view %>";
+  var user = JSON.parse(`<%- JSON.stringify(user) %>`);
+  if (view != "") {
+    $(`#${view}`).addClass("active");
+    if (view != "sb-home") $(`#${view}`).parent().parent().addClass("active");
+  }
+</script>

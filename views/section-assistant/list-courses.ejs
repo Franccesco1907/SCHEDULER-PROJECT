@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+
+<head>
+  <%- include('../partials/head', {title: 'Listado de Cursos'}); %>
+  <link rel="stylesheet" href="/assets/plugins/jquery-datatable/dataTables.bootstrap4.min.css" />
+
+  <link rel="stylesheet" href="/assets/plugins/dropzone/dropzone.css">
+
+  <script src="https://kit.fontawesome.com/c1c34b92ef.js" crossorigin="anonymous"></script>
+
+  <link rel="stylesheet" href="/assets/plugins/sweetalert/sweetalert.css" />
+
+  <style>
+    .course-selected {
+      background-color: #FFF8B5 !important;
+    }
+
+    .modal {
+      /*padding-top: 50px !important;*/
+    }
+
+    #table-courses-preview thead th,
+    #table-courses-preview thead td {
+      padding: 8px 10px;
+      /* e.g. change 8x to 4px here */
+    }
+
+    #table-courses-preview tbody th,
+    #table-courses-preview tbody td {
+      padding: 4px 10px;
+      /* e.g. change 8x to 4px here */
+    }
+
+    /*
+    .modal-dialog {
+      overflow-y: initial !important
+    }
+
+    .modal-body {
+      height: 80vh;
+      overflow-y: auto;
+    }*/
+  </style>
+</head>
+
+<body class="theme-purple">
+  <%- include('../partials/app/header') %>
+  <%- include('../partials/app/topbar'); %>
+  <%- include('../partials/app/leftsidebar', {user}); %>
+
+  <section class="content">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-lg-7 col-md-6 col-sm-12">
+          <h2>
+            Cursos
+            <small>Listado de Cursos</small>
+          </h2>
+        </div>
+        <div class="col-lg-5 col-md-6 col-sm-12">
+          <ul class="breadcrumb float-md-right">
+            <li class="breadcrumb-item">
+              <a href="/"><i class="zmdi zmdi-home"></i>App</a>
+            </li>
+            <li class="breadcrumb-item"><a href="/">Cursos</a></li>
+            <li class="breadcrumb-item active">Listado de Cursos</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="container-fluid">
+      <!-- Exportable Table -->
+      <div class="row clearfix">
+        <div class="col-lg-12">
+          <div class="card">
+            <div class="header">
+              <h2><strong>Cursos de <%= user.seccion %></strong></h2>
+              <div class="row pt-2">
+                <div class="col-sm-12">
+                  <div class="float-left">
+                    <button class="btn btn-primary waves-effect" data-toggle="modal" data-target="#loadMasiveCoursesModal">
+                      Carga Masiva Cursos<i class="fas fa-file-upload pl-2"></i>
+                    </button>
+                    <button class="btn btn-primary waves-effect" data-toggle="modal" data-target="#loadMasiveSchedulesModal">
+                      Carga Masiva Horarios<i class="fas fa-file-upload pl-2"></i>
+                    </button>
+                  </div>
+
+                  <div class="float-right">
+                    <button id="delete-course-modal" type="button" class="btn btn-danger waves-effect">
+                      Eliminar
+                      <!--<i class="fas fa-times pl-2"></i>-->
+                    </button>
+                    <button id="edit-course-modal" type="button" class="btn btn-info">
+                      Editar
+                      <!--<i class="fas fa-edit pl-2"></i>-->
+                    </button>
+                    <a type="button" class="btn btn-primary" href="/section-assistant/register-course">
+                      Agregar
+                      <!--<i class="fas fa-plus pl-2"></i></a>-->
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="body">
+              <div class="row clearfix">
+                <div class="col-lg-6">
+                  <b>Código / Nombre:</b>
+                  <div class="form-group">
+                    <input type="text" id="code-name-course" class="form-control" placeholder="" />
+                  </div>
+                </div>
+
+                <div class="col-lg-6">
+                  <div class="float-right">
+                    <button id="search-course" class="btn btn-info" style="margin-top: 20px !important">
+                      Buscar Curso
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="table-responsive">
+                <table id="courses-data-table" class="
+                table table-bordered table-striped table-hover
+                dataTable
+                js-exportable
+              ">
+                  <thead style="background-color: #167bc3; color:white">
+                    <tr>
+                      <th>Código</th>
+                      <th>Nombre del curso</th>
+                      <th>Facultad</th>
+                      <th>Horas de Clase</th>
+                      <th>Créditos</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="row clearfix">
+                <div class="col-3">
+                  <input type="hidden" id="array-select" class="form-control">
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- #END# Exportable Table -->
+    </div>
+  </section>
+
+  <div class="modal fade show" id="deleteCourseModal" tabindex="-1" role="dialog" style="display: none;" aria-modal="true">
+    <div class="modal-dialog modal-sm" role="document">
+      <div class="modal-content">
+        <div class="modal-header bg-red">
+          <h4 class="title pt-10">Eliminar Curso</h4>
+        </div>
+        <div class="modal-body">
+          <div class="text-center">
+            ¿Está seguro de querer eliminar el curso de <span class="name-course"></span> del sistema?
+          </div>
+          <hr class="mt-2 mb-0">
+        </div>
+        <div class="modal-footer">
+          <div class="float-left">
+            <button class="btn btn-danger btn-round waves-effect justify-content-center" data-dismiss="modal">
+              Cancelar
+            </button>
+          </div>
+
+          <div class="float-right">
+            <button id="delete-course" class="btn btn-primary btn-round waves-effect justify-content-center">
+              Eliminar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade show" id="loadMasiveCoursesModal" tabindex="-1" role="dialog" aria-modal="true" style="display: none;">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header" style="background-color: #167bc3;">
+          <h4 class="title text-white">Carga Masiva de Cursos</h4>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-lg-12 pb-3">
+              <a type="button" class="btn btn-round waves-effect g-bg-cgreen text-white" href="/files/Formato-Cursos.xlsx">
+                Descargar Formato en Excel
+                <i class="fas fa-download pl-2"></i>
+              </a>
+            </div>
+            <div class="col-lg-12">
+              <form id="upload-courses" method="post" class="dropzone">
+                <input type="hidden" name="_csrf" id="csrf" value="<%= csrfToken %>" />
+              </form>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <div class="float-left">
+            <button class="btn btn-danger btn-round waves-effect" data-dismiss="modal">
+              Cancelar
+            </button>
+          </div>
+
+          <div class="float-right">
+            <button id="load-data-courses" class="btn btn-primary btn-round waves-effect">
+              Cargar Archivo
+              <i class="fas fa-file-upload pl-2"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade show" id="loadMasiveSchedulesModal" tabindex="-1" role="dialog" aria-modal="true" style="display: none;">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header" style="background-color: #167bc3;">
+          <h4 class="title text-white">Carga Masiva de Horarios</h4>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-lg-12 pb-3">
+              <a type="button" class="btn btn-round waves-effect g-bg-cgreen text-white" href="/files/Formato-Horarios.xlsx">
+                Descargar Formato en Excel
+                <i class="fas fa-download pl-2"></i>
+              </a>
+            </div>
+            <div class="col-lg-12">
+              <form id="upload-schedules" method="post" class="dropzone">
+
+              </form>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <div class="float-left">
+            <button class="btn btn-danger btn-round waves-effect" data-dismiss="modal">
+              Cancelar
+            </button>
+          </div>
+
+          <div class="float-right">
+            <button id="load-data-schedules" class="btn btn-primary btn-round waves-effect">
+              Cargar Archivo
+              <i class="fas fa-file-upload pl-2"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade show" id="previewCoursesModal" tabindex="-1" role="dialog" aria-modal="true" style="display: none;">
+    <div class="modal-dialog modal-xl" role="document">
+      <div class="modal-content">
+        <div class="modal-header" style="background-color: #167bc3;">
+          <h4 class="title text-white">Vista Previa de Cursos</h4>
+        </div>
+        <div class="modal-body">
+          <table class="table table-bordered table-striped table-hover js-basic-example dataTable" id="table-courses-preview">
+            <thead style="background-color: #167bc3; color:white">
+              <tr>
+                <th>Código</th>
+                <th>Nombre del Curso</th>
+                <th>Créditos</th>
+                <th>Facultad</th>
+                <th>Hora Clase</th>
+              </tr>
+            </thead>
+            <tbody>
+            </tbody>
+          </table>
+
+          <div id="errors-courses" class="pt-3">
+
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <div class="float-left">
+            <button class="btn btn-danger btn-round waves-effect" data-dismiss="modal">
+              Cancelar
+            </button>
+          </div>
+
+          <div class="float-right">
+            <button id="load-courses-massive" class="
+                      btn btn-primary btn-round
+                      waves-effect
+                    ">
+              Cargar Cursos
+              <i class="fas fa-file-upload pl-2"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade show" id="previewSchedulesModal" tabindex="-1" role="dialog" aria-modal="true" style="display: none;">
+    <div class="modal-dialog modal-xl" role="document">
+      <div class="modal-content">
+        <div class="modal-header" style="background-color: #167bc3;">
+          <h4 class="title text-white">Vista Previa de Horarios</h4>
+        </div>
+        <div class="modal-body">
+          <table class="table table-bordered table-striped table-hover js-basic-example dataTable" id="table-schedules-preview">
+            <thead style="background-color: #167bc3; color:white">
+              <tr>
+                <th>Código Curso</th>
+                <th>Ciclo</th>
+                <th>Código Horario</th>
+                <th>Tipo de Horario</th>
+              </tr>
+            </thead>
+            <tbody>
+            </tbody>
+          </table>
+
+          <div id="errors-schedules" class="pt-3">
+
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <div class="float-left">
+            <button class="btn btn-danger btn-round waves-effect" data-dismiss="modal">
+              Cancelar
+            </button>
+          </div>
+
+          <div class="float-right">
+            <button id="load-schedules-massive" class="
+                      btn btn-primary btn-round
+                      waves-effect
+                    ">
+              Cargar Horarios
+              <i class="fas fa-file-upload pl-2"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <%- include('../partials/app/scripts', {view: 'sb-courses-list'}); %>
+
+  <script src="/light/assets/bundles/datatablescripts.bundle.js"></script>
+  <script src="/assets/plugins/jquery-datatable/buttons/dataTables.buttons.min.js"></script>
+  <script src="/assets/plugins/jquery-datatable/buttons/buttons.bootstrap4.min.js"></script>
+  <script src="/assets/plugins/jquery-datatable/buttons/buttons.colVis.min.js"></script>
+  <script src="/assets/plugins/jquery-datatable/buttons/buttons.html5.min.js"></script>
+  <script src="/assets/plugins/jquery-datatable/buttons/buttons.print.min.js"></script>
+  <script src="/assets/plugins/dropzone/dropzone.js"></script>
+
+  <script src="/assets/plugins/sweetalert/sweetalert.min.js"></script>
+  <script src="/light/assets/bundles/mainscripts.bundle.js"></script>
+  <script>
+    var courses = JSON.parse(`<%-JSON.stringify(courses)%>`);
+    var idSeccion = "<%= user.idSeccion %>";
+    var jwt = "<%= jwt %>";
+  </script>
+
+  <script src="/js/section-assistant/list-courses.js" type="module"></script>
+
+</body>
+
+</html>

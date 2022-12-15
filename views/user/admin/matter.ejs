@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+
+<head>
+    <%- include('../../partials/head', {title: 'Listado de Asuntos'}); %>
+    <link rel="stylesheet" href="/assets/plugins/jquery-datatable/dataTables.bootstrap4.min.css"/>
+
+    <link rel="stylesheet" href="/assets/plugins/dropzone/dropzone.css">
+
+    <script src="https://kit.fontawesome.com/c1c34b92ef.js" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="/assets/plugins/sweetalert/sweetalert.css"/>
+
+    <style>
+        .matter-selected {
+            background-color: #FFF8B5 !important;
+        }
+
+        .modal {
+            /*padding-top: 50px !important;*/
+        }
+
+    </style>
+</head>
+
+<body class="theme-purple">
+<%- include('../../partials/app/header') %>
+<%- include('../../partials/app/topbar'); %>
+<%- include('../../partials/app/leftsidebar', {user}); %>
+
+<section class="content">
+    <div class="block-header">
+        <div class="row">
+            <div class="col-lg-7 col-md-6 col-sm-12">
+                <h2>
+                    Gestión de Asuntos y Trámites
+                    <small>Listado de Asuntos</small>
+                </h2>
+            </div>
+            <div class="col-lg-5 col-md-6 col-sm-12">
+                <ul class="breadcrumb float-md-right">
+                    <li class="breadcrumb-item">
+                        <a href="/"><i class="zmdi zmdi-home"></i>App</a>
+                    </li>
+                    <li class="breadcrumb-item"><a href="/">Gestión de Asuntos y Trámites</a></li>
+                    <li class="breadcrumb-item active" style="color:white;">Listado de Asuntos</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <!-- Exportable Table -->
+        <div class="row clearfix">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="header">
+                        <div class="row pt-2">
+                            <div class="col-sm-12">
+                                <div class="float-right">
+                                    <button id="delete-matter-modal" type="button" class="btn btn-danger waves-effect" data-color-name="alert-warning"
+                                            data-toggle="modal">
+                                        Eliminar 
+                                    </button>
+                                    <button id="edit-matter-modal" type="button" class="btn btn-info waves-effect" data-color-name="alert-warning"
+                                        data-toggle="modal">
+                                        Editar 
+                                    </button>
+                                    <a type="button" class="btn btn-primary waves-effect" style="color:white;"
+                                       data-toggle="modal" data-target="#addMatterModal">
+                                        Agregar 
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="body">
+                        <table id="matters-data-table" class="
+                    table table-bordered table-striped table-hover
+                    dataTable
+                    js-exportable
+                  ">
+                            <thead style="background-color: #167bc3; color:white">
+                            <tr>
+                                <th>Nombre del Asunto</th>
+                                <th>Nro. de Trámites Asociados</th>
+                                <th>Estado</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                <!--back lo hace-->
+                            </tbody>
+                        </table>
+
+                        <div class="row clearfix">
+                            <div class="col-3">
+                                <input type="hidden" id="array-select" class="form-control">
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- #END# Exportable Table -->
+    </div>
+</section>
+
+
+
+<div class="modal fade show" id="deleteMatterModal" tabindex="-1" role="dialog" style="display: none;"
+     aria-modal="true">
+    <div class="modal-dialog modal-dialog-centered" style="width:400px;" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-red">
+                <h4 class="title pt-10">Deshabilitar Asunto</h4>
+            </div>
+            <div class="modal-body">¿Estás seguro que quiere deshabilitar este asunto y todos sus trámites?</div>
+            <div class="modal-footer">
+                <div class="float-left">
+                    <button id="close-delete-matter-modal"
+                            class="btn btn-danger btn-round waves-effect justify-content-center" data-dismiss="modal">
+                        Cancelar
+                    </button>
+                </div>
+
+                <div class="float-right">
+                    <button id="delete-matter" class="btn btn-primary btn-round waves-effect justify-content-center">
+                        Deshabilitar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<button id="activate-edit-modal" data-toggle="modal" data-target="#editMatterModal" style="display: none;">
+</button>
+
+<div class="modal fade show" id="editMatterModal" tabindex="-1" role="dialog" style="display: none;"
+     aria-modal="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-blue">
+                <h4 class="title pt-10">Editar Asunto</h4>
+            </div>
+
+            <div class="modal-body">
+                <label for="matter-name">
+                    Nombre del asunto: <span class="required-field">*</span>
+                </label>                
+                <div class="custom-control custom-switch float-right">
+                    <input type="checkbox" class="custom-control-input" id="switchHabilitado">
+                    <label class="custom-control-label float-right" for="switchHabilitado">
+                        Habilitado  <span class="required-field">*</span>
+                    </label>
+                  </div>
+                <div class="form-group">
+                    <input
+                      type="text"
+                      name="matter-name"
+                      class="form-control"
+                      id="edit-matter-name"
+                      placeholder="Ingrese el nombre del asunto"
+                      required
+                    />
+                </div>
+
+                <label for="matter-name" style="position: absolute; top:120px;">
+                    Trámites asociados:
+                </label>
+
+                
+                <button id="edit-matter-new-paperwork-button" type="button" class="btn btn-primary float-right">
+                    Nuevo trámite
+                </button>
+
+
+                <table id="paperwork-matter-edit-data-table" class="
+                    table table-borderless table-striped table-hover table-sm
+                    dataTable
+                    js-exportable
+                  ">
+                    <thead style="background-color: #167bc3; color:white">
+                    <tr>
+                        <th style="max-width: 1px; text-align: center;">
+                            &nbsp;&nbsp;&nbsp;&nbsp;Nº
+                        </th>
+                        <th>
+                            &nbsp;&nbsp;Nombre del trámite
+                        </th>
+                        <th style="max-width: 1px; text-align: center;">
+                            &nbsp;&nbsp;Borrar
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody id="edit-paperwork-table-tbody">
+                        <!-- Se agregan nuevas filas con el botón -->
+                    </tbody>
+                </table>
+            
+            </div>
+
+            <div class="modal-footer">
+                <div class="float-left">
+                    <button id="close-edit-matter-modal"
+                            class="btn btn-danger btn-round waves-effect justify-content-center" data-dismiss="modal">
+                        Cancelar
+                    </button>
+                </div>
+
+                <div class="float-right">
+                    <button id="save-edit-matter-button" class="btn btn-primary btn-round waves-effect justify-content-center">
+                        Guardar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade show" id="addMatterModal" tabindex="-1" role="dialog" style="display: none;"
+     aria-modal="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-blue">
+                <h4 class="title pt-10">Agregar Asunto</h4>
+            </div>
+
+            <div class="modal-body">
+                <label for="matter-name">
+                    Nombre del asunto: <span class="required-field">*</span>
+                </label>
+                <div class="form-group">
+                    <input
+                      type="text"
+                      name="matter-name"
+                      class="form-control"
+                      id="matter-name"
+                      placeholder="Ingrese el nombre del asunto"
+                      required
+                    />
+                </div>
+
+                <label for="matter-name" style="position: absolute; top:120px;">
+                    Trámites asociados:
+                </label>
+
+                
+                <button id="new-paperwork-button" type="button" class="btn btn-primary float-right">
+                    Nuevo trámite
+                </button>
+
+
+                <table id="paperwork-matter-add-data-table" class="
+                    table table-borderless table-striped table-hover table-sm
+                    dataTable
+                    js-exportable
+                  ">
+                    <thead style="background-color: #167bc3; color:white">
+                    <tr>
+                        <th style="max-width: 1px; text-align: center;">
+                            &nbsp;&nbsp;&nbsp;&nbsp;Nº
+                        </th>
+                        <th>
+                            &nbsp;&nbsp;Nombre del trámite
+                        </th>
+                        <th style="max-width: 1px; text-align: center;">
+                            &nbsp;&nbsp;Borrar
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody id="paperwork-table-tbody">
+                        <!-- Se agregan nuevas filas con el botón -->
+                    </tbody>
+                </table>
+            
+            </div>
+
+            <div class="modal-footer">
+                <div class="float-left">
+                    <button id="close-add-matter-modal"
+                            class="btn btn-danger btn-round waves-effect justify-content-center" data-dismiss="modal">
+                        Cancelar
+                    </button>
+                </div>
+
+                <div class="float-right">
+                    <button id="save-new-matter-button" class="btn btn-primary btn-round waves-effect justify-content-center">
+                        Guardar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<button id="open-preview-modal" data-toggle="modal" data-target="#previewDataModal" style="display: none;">
+</button>
+
+<button id="success-delete-matter" class="btn btn-raised btn-primary waves-effect btn-round" data-type="success"
+        style="display: none;">CLICK ME
+</button>
+
+<%- include('../../partials/app/scripts', {view: 'sb-matters-request'}); %>
+
+<script src="/light/assets/bundles/datatablescripts.bundle.js"></script>
+<script src="/assets/plugins/jquery-datatable/buttons/dataTables.buttons.min.js"></script>
+<script src="/assets/plugins/jquery-datatable/buttons/buttons.bootstrap4.min.js"></script>
+<script src="/assets/plugins/jquery-datatable/buttons/buttons.colVis.min.js"></script>
+<script src="/assets/plugins/jquery-datatable/buttons/buttons.html5.min.js"></script>
+<script src="/assets/plugins/jquery-datatable/buttons/buttons.print.min.js"></script>
+<script src="/assets/plugins/dropzone/dropzone.js"></script>
+
+<script src="/assets/plugins/bootstrap-notify/bootstrap-notify.js"></script>
+<script src="/assets/plugins/sweetalert/sweetalert.min.js"></script>
+<script src="/light/assets/bundles/mainscripts.bundle.js"></script>
+<script>
+  var idPersona = "<%= user.idPersona %>";
+  var jwt = "<%= jwt %>";
+</script>
+
+<script src="/js/user/admin/matter.js" type="module"></script>
+
+</body>
+
+</html>

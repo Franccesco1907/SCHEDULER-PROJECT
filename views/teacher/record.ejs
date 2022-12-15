@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+  <head>
+    <%- include('../partials/head', {title: 'Expediente de docente'}); %>
+    <link
+      rel="stylesheet"
+      href="/assets/plugins/jquery-datatable/dataTables.bootstrap4.min.css"
+    />
+
+    <link rel="stylesheet" href="/assets/plugins/dropzone/dropzone.css" />
+
+    <script
+      src="https://kit.fontawesome.com/c1c34b92ef.js"
+      crossorigin="anonymous"
+    ></script>
+
+    <link rel="stylesheet" href="/assets/plugins/sweetalert/sweetalert.css" />
+
+    <link
+      rel="stylesheet"
+      href="/assets/plugins/bootstrap-select/css/bootstrap-select.css"
+    />
+
+    <style>
+      .professor-selected {
+        background-color: #fff8b5 !important;
+      }
+
+      .modal {
+        padding-top: 50px !important;
+      }
+
+      #table-professor-preview thead th,
+      #table-professor-preview thead td {
+        padding: 8px 10px;
+        /* e.g. change 8x to 4px here */
+      }
+
+      #table-professor-preview tbody th,
+      #table-professor-preview tbody td {
+        padding: 4px 10px;
+        /* e.g. change 8x to 4px here */
+      }
+    </style>
+  </head>
+
+  <body class="theme-purple">
+    <%- include('../partials/app/header') %> <%-
+    include('../partials/app/topbar'); %> <%-
+    include('../partials/app/leftsidebar', {user}); %>
+
+    <section class="content">
+      <div class="block-header">
+        <div class="row">
+          <div class="col-lg-7 col-md-6 col-sm-12">
+            <h2>
+              Docentes
+              <small>Expediente de Docente</small>
+            </h2>
+          </div>
+          <div class="col-lg-5 col-md-6 col-sm-12">
+            <ul class="breadcrumb float-md-right">
+              <li class="breadcrumb-item">
+                <a href="/"><i class="zmdi zmdi-home"></i>App</a>
+              </li>
+              <li class="breadcrumb-item"><a href="/">Docentes</a></li>
+              <li class="breadcrumb-item active" style="color:white;">Expediente de Docente</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="container-fluid">
+        <div class="row clearfix">
+          <div class="col-lg-12">
+            <div class="card">
+              <div class="header">
+                <div class="row pt-2">
+                  <div class="col-sm-12">
+                    <!-- Información general del docente -->
+                    <div id="record-main-data" style="display:flex;">
+                      <!-- Foto -->
+                      <div class="col-sm-3 col-md-2" style="text-align: center;">
+                          <img id="img-teacher" src="" alt="" height="195x"/>
+                      </div>
+                      <!-- Datos principales -->
+                      <div class="col-sm-9 col-md-12">
+                        <h5><b id="teacher-name-record"></b>&nbsp;&nbsp;<span id="teacher-code-record"></span></h5>                                                
+                        <p id="teacher-category-record"></p>
+                        <p id="teacher-dedication-record"></p>
+                        <p id="teacher-department-section-record"></p>
+                        <a id="teacher-email-link-record" href="" target = "_blank" style="color:#167bc3;"></a>
+                      </div>
+                    </div>
+
+                    <!-- Información específica del docente -->
+                    <div>
+                        <nav>
+                          <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                            <a class="nav-item nav-link"        id="nav-summary-tab"     data-toggle="tab" href="#nav-summary"      role="tab" aria-controls="nav-summary"      aria-selected="true"  style="color:#414141; display:none;">Resumen</a>
+                            <a class="nav-item nav-link active" id="nav-hours-tab"       data-toggle="tab" href="#nav-hours"        role="tab" aria-controls="nav-hours"        aria-selected="false" style="color:#414141;">Horas de Docencia</a>
+                            <a class="nav-item nav-link"        id="nav-researches-tab"  data-toggle="tab" href="#nav-researches"   role="tab" aria-controls="nav-researches"   aria-selected="false" style="color:#414141;">Investigaciones</a>
+                            <a class="nav-item nav-link"        id="nav-evaluations-tab" data-toggle="tab" href="#nav-evaluations"  role="tab" aria-controls="nav-evaluations"  aria-selected="false" style="color:#414141;">Evaluaciones</a>
+                            <a class="nav-item nav-link"        id="nav-posts-tab"       data-toggle="tab" href="#nav-posts"        role="tab" aria-controls="nav-posts"        aria-selected="false" style="color:#414141; display:none;">Cargos</a>
+                            <a class="nav-item nav-link"        id="nav-paperwork-tab"   data-toggle="tab" href="#nav-paperwork"    role="tab" aria-controls="nav-paperwork"    aria-selected="false" style="color:#414141;">Trámites</a>
+                          </div>
+                        </nav>
+                        <div class="tab-content" id="nav-tabContent">
+                          <!-- Resumen -->
+                          <div class="tab-pane fade" id="nav-summary" role="tabpanel" aria-labelledby="nav-summary-tab">
+                            <div style="padding-top: 2%; padding-left: 5%; text-align: left;">
+                              <p><b>GRADOS ACADÉMICOS Y/O TÍTULOS PROFESIONALES</b></p>
+                              <ul id="degrees-list">
+                              </ul>
+                            </div>
+                          </div>
+                            <!-- Horas de Docencia -->
+                          <div class="tab-pane fade show active" id="nav-hours" role="tabpanel" aria-labelledby="nav-hours-tab">
+                            <div>
+                              <div class="col-md-4" style="padding-left: 5%;">
+                                <label class="mb-1" for="semester-select-hours">Ciclo</label>
+                                <select class="form-control show-tick ms select2" name="semester-select-hours" id="semester-select-hours" data-placeholder="Seleccione un ciclo" required>
+                                </select>
+                              </div>
+                            </div>
+                            <div style="padding-left: 5%; padding-top: 2%;">
+                                <b><span id="label-debt-hours"></span>&nbsp;<span id="debt-hours-record"></span></b>
+                            </div>
+                            <div class="col-md-12 col-sm-12" style="padding-left: 2.75%;">  
+                                <div class="body table-responsive">
+                                    <table id="hours-record-data-table" class="
+                                            table table-bordered table-striped table-hover
+                                            dataTable
+                                            js-exportable
+                                    ">
+                                        <thead style="background-color: #167bc3; color:white">
+                                            <tr>
+                                                <th>Código</th>
+                                                <th>Curso</th>
+                                                <th>Tipo Horario</th>
+                                                <th>Horario</th>
+                                                <th>Tipo de dictado</th>
+                                                <th>Horas</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="hours-record-table-tbody">
+                                        </tbody>
+                                    </table>   
+                                </div>
+                            </div>
+                            <div style="text-align: right; padding-right: 5%;">
+                                <p>
+                                    <b>Total de horas:&nbsp;<span id="total-hours-record"></span></b>
+                                </p>
+                            </div>
+                          </div>
+                          <!-- Investigaciones -->
+                          <div class="tab-pane fade" id="nav-researches" role="tabpanel" aria-labelledby="nav-researches-tab">
+                            <div style="padding-top: 2%; padding-left: 5%; text-align: left; margin-right: 5%;">
+                              <p><b>PROYECTOS DE INVESTIGACIÓN</b></p>
+                              <ul id="research-projects-list">
+                              </ul>
+                              <br/>
+                              <p><b>PUBLICACIONES</b></p>
+                              <ul id="publications-list">
+                              </ul>
+                            </div>
+                          </div>
+                          <!-- Evaluaciones -->
+                          <div class="tab-pane fade" id="nav-evaluations" role="tabpanel" aria-labelledby="nav-evaluations-tab">
+                            <div>
+                              <div class="col-md-4" style="padding-left: 5%;">
+                                <label class="mb-1" for="semester-select-evaluations">Ciclo</label>
+                                <select class="form-control show-tick ms select2" name="semester-select-evaluations" id="semester-select-evaluations" data-placeholder="Seleccione un ciclo" required>
+                                </select>
+                              </div>
+                            </div>
+                            <div id="div-evaluations" class="col-md-12 col-sm-12" style="padding-left: 2.75%;">
+                              <p id="no-evaluations-found" style="padding-top:2%; text-align: center; display: none;">
+                                <b>No existen evaluaciones registradas para el docente en el ciclo seleccionado.</b>
+                              </p>
+                              <div class="body table-responsive">
+                                <table id="evaluations-record-data-table" class="
+                                        table table-bordered table-striped table-hover
+                                        dataTable
+                                        js-exportable
+                                ">
+                                    <thead style="background-color: #167bc3; color:white">
+                                      <tr>
+                                        <th>Criterio de evaluación</th>
+                                        <th>Puntaje obtenido</th>
+                                        <th>Puntaje máximo</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody id="evaluations-record-table-tbody">
+                                    </tbody>
+                                </table>   
+                              </div>
+                            </div>
+                          </div>
+                          <!-- Cargos -->
+                          <div class="tab-pane fade" id="nav-posts" role="tabpanel" aria-labelledby="nav-posts-tab">
+                            <div id="div-posts" class="col-md-12 col-sm-12" style="padding-left: 2.75%;">
+                              <div class="body table-responsive">
+                                <table id="posts-record-data-table" class="
+                                        table table-bordered table-striped table-hover
+                                        dataTable
+                                        js-exportable
+                                ">
+                                    <thead style="background-color: #167bc3; color:white">
+                                      <tr>
+                                        <th>Cargo</th>
+                                        <th>Fecha de Asignación</th>
+                                        <th>Fecha de Relevo</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody id="posts-record-table-tbody">
+                                    </tbody>
+                                </table>   
+                              </div>
+                            </div>
+                          </div>
+                          <!-- Trámites -->
+                          <div class="tab-pane fade" id="nav-paperwork" role="tabpanel" aria-labelledby="nav-paperwork-tab">
+                            <div class="body table-responsive">
+                              <table id="paperwork-data-table-record" class="
+                                table table-bordered table-striped table-hover
+                                dataTable
+                                js-exportable
+                              ">
+                                  <thead style="background-color: #167bc3; color:white">
+                                  <tr>
+                                      <th>Fecha</th>
+                                      <th>Enviado por</th>
+                                      <th>Derivado a</th>
+                                      <th>Asunto</th>
+                                      <th>Trámite</th>
+                                      <th>Recibido / Enviado</th>
+                                      <th>Estado</th>
+                                  </tr>
+                                  </thead>
+                                  <tbody>
+                                  </tbody>
+                              </table>
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+
+                    
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <%- include('../partials/app/scripts', {view: ''}); %>
+
+    <!-- Jquery DataTable Plugin Js -->
+    <script src="/light/assets/bundles/datatablescripts.bundle.js"></script>
+    <script src="/assets/plugins/jquery-datatable/buttons/dataTables.buttons.min.js"></script>
+    <script src="/assets/plugins/jquery-datatable/buttons/buttons.bootstrap4.min.js"></script>
+    <script src="/assets/plugins/jquery-datatable/buttons/buttons.colVis.min.js"></script>
+    <script src="/assets/plugins/jquery-datatable/buttons/buttons.html5.min.js"></script>
+    <script src="/assets/plugins/jquery-datatable/buttons/buttons.print.min.js"></script>
+    <script src="/assets/plugins/dropzone/dropzone.js"></script>
+
+    <script src="/assets/plugins/sweetalert/sweetalert.min.js"></script>
+    <script src="/light/assets/bundles/mainscripts.bundle.js"></script>
+
+    <script>
+        var jwt = "<%= jwt %>";
+        var idDocente="<%= idDocente %>";
+        var semesters=JSON.parse('<%-JSON.stringify(semesters)%>');
+        var currentSemester=JSON.parse('<%-JSON.stringify(currentSemester)%>');
+    </script>
+
+    <script src="/js/teacher/record.js" type="module"></script>
+  </body>
+</html>

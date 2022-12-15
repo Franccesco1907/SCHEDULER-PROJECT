@@ -1,0 +1,78 @@
+/*
+.theme-purple section.content:before {
+    background-color: #167bc3;
+}
+
+.theme-purple .sidebar .menu .list li.active>:first-child i,
+.theme-purple .sidebar .menu .list li.active>:first-child span {
+    color: #167bc3;
+}
+
+.theme-purple .card .header h2 strong {
+    color: #167bc3;
+}
+
+.theme-purple .card .header h2:before {
+    background: #167bc3;
+}
+
+.theme-purple .nav-tabs .nav-link.active {
+    border: 1px solid #167bc3 !important;
+}
+
+.theme-purple .page-loader-wrapper {
+    background: #167bc3;
+}
+
+nav {
+    background-color: #167bc3 !important;
+}
+
+.theme-purple .btn-primary {
+    background: #167bc3;
+}
+
+*/
+
+.a-top-bar {
+    margin-top: 2px !important;
+    padding-top: 2px !important;
+}
+
+.icon-top-bar {
+    font-size: 20px !important;
+}
+
+.required-field {
+    color: red;
+    font-weight: 600;
+}
+
+.irs-grid-text, .irs-single {
+    font-size: 1em !important;
+}
+
+.irs-min, .irs-max {
+    display: none !important;
+}
+
+.off-pad {
+    padding-left: 0px !important;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+.breadcrumb-item.active {
+    color: #E6FFFB !important;
+    font-weight: 700 !important;
+}

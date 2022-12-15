@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html class="no-js" lang="es">
+
+<head>
+  <%- include('../partials/head', {title: 'Postulación a Convocatoria'}); %>
+
+  <link rel="stylesheet" href="/assets/plugins/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css" />
+  <link rel="stylesheet" href="/assets/plugins/dropzone/dropzone.css" />
+  <link rel="stylesheet" href="/assets/plugins/bootstrap-select/css/bootstrap-select.css" />
+  <link rel="stylesheet" href="/assets/plugins/select2/select2.css" />
+  <link rel="stylesheet" href="/assets/plugins/sweetalert/sweetalert.css" />
+  <link rel="stylesheet" href="/light/assets/css/main.css">
+
+  <script src="https://kit.fontawesome.com/c1c34b92ef.js" crossorigin="anonymous"></script>
+</head>
+
+<body class="theme-purple">
+  <%- include('../partials/app/header') %>
+  <%- include('../partials/app/topbar'); %>
+  <%- include('../partials/app/leftsidebar', {user}); %>
+
+  <!-- Main Content -->
+  <section class="content">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-lg-7 col-md-6 col-sm-12">
+          <h2>
+            Convocatoria para nuevos docentes<small>Seleccione la convocatoria a la cual postular
+            </small>
+          </h2>
+        </div>
+        <div class="col-lg-5 col-md-6 col-sm-12">
+          <ul class="breadcrumb float-md-right">
+            <li class="breadcrumb-item">
+              <a href="/"> <i class="zmdi zmdi-home"></i>App</a>
+            </li>
+            <li class="breadcrumb-item">
+              <a href="/guest">Portal de Visitante</a>
+            </li>
+            <li class="breadcrumb-item active">Convocatoria</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="container-fluid">
+      <!-- Select Convocation -->
+      <div class="row clearfix">
+        <div class="col-lg-12 col-md-12 col-sm-12">
+          <div class="card">
+            <!--<div class="header">
+              <h2>
+                <strong></strong>
+              </h2>
+            </div>-->
+
+            <div class="body">
+                <div class="row clearfix">
+                    <div class="col md-4">
+                        <label class="mb-1" for="department">1. Seleccione el departamento
+                        </label>
+                        <select class="form-control show-tick ms select2" name="department" id="department" }
+                        data-placeholder="Seleccione un Departamento" required autocomplete="off">
+                            <option></option>
+                            <% for (let department of departments) { %>
+                            <option value="<%= department.idDepartamento %>">
+                                <%= department.nombre %>
+                            </option>
+                            <% } %>
+                        </select>
+                        
+                    </div>
+                    <div class="col md-4"></div>
+                </div>
+
+                <div class= "row clearfix pt-2">
+                    <div class="col md-6">
+                        <label class="mb-1" for="convocation">2. Seleccione la convocatoria
+                        </label>
+                    </div>
+                        
+                </div>
+                <div id=listing-body>
+
+                </div>
+
+                <div id=no-listings>
+                  <label style="color: #b2b4b6; text-align: center">-- No hay convocatorias disponibles --</label>
+                </div>
+            
+                <div class="row clearfix pt-2">
+                    <div class="col-lg-12">
+                        <div class="float-right" style="padding-top: 10px !important">
+                            <a type="button" class="btn btn-primary ml-3" href="/guest">
+                                Regresar
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <%- include('../partials/app/scripts', {view: 'sb-table-request'}); %>
+
+  <script src="/assets/plugins/momentjs/moment.js"></script>
+  <script src="/assets/plugins/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js"></script>
+  <script src="/assets/plugins/bootstrap-notify/bootstrap-notify.js"></script>
+  <script src="/light/assets/bundles/mainscripts.bundle.js"></script>
+  <script src="/assets/plugins/dropzone/dropzone.js"></script>
+  <script src="/assets/plugins/select2/select2.min.js"></script>
+  <script src="/assets/plugins/momentjs/moment.js"></script>
+  <script src="/assets/plugins/sweetalert/sweetalert.min.js"></script>
+
+  <script>
+    var today = moment(new Date()).format("DD/MM/YYYY");
+  </script>
+
+  <script src="/js/guest/select-convocation.js" type="module"></script>
+</body>
+
+</html>

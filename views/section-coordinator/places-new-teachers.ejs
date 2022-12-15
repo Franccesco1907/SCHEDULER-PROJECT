@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
+  <%- include('../partials/head', {title: 'Plazas para nuevos docentes C'}); %>
+  <link rel="stylesheet" href="/assets/plugins/jquery-datatable/dataTables.bootstrap4.min.css" />
+  
+  <link rel="stylesheet" href="/assets/plugins/select2/select2.css" />
+  <link rel="stylesheet" href="/light/assets/css/main.css">
+  <link rel="stylesheet" href="/assets/plugins/dropzone/dropzone.css" />
+  <!-- <link rel="stylesheet" href="/assets/plugins/bootstrap-select/css/bootstrap-select.css" /> -->
+  <!-- Range Slider Css -->
+  <link rel="stylesheet" href="../assets/plugins/ion-rangeslider/css/ion.rangeSlider.css" />
+  <link rel="stylesheet" href="../assets/plugins/ion-rangeslider/css/ion.rangeSlider.skinFlat.css" />
+  <script src="https://kit.fontawesome.com/c1c34b92ef.js" crossorigin="anonymous"></script>
+
+  <link rel="stylesheet" href="/assets/plugins/sweetalert/sweetalert.css" />
+  
+  <style>
+
+    /* Chrome, Safari, Edge, Opera */
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    /* Firefox */
+    input[type="number"] {
+      -moz-appearance: textfield;
+    }
+
+    .modal {
+      padding-top: 250px !important;
+    }
+  </style>
+</head>
+
+<body class="theme-purple">
+  <%- include('../partials/app/header') %>
+  <%- include('../partials/app/topbar'); %>
+  <%- include('../partials/app/leftsidebar', {user}); %>
+
+  <section class="content">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-lg-7 col-md-6 col-sm-12">
+          <h2>
+            Plazas para nuevos docentes
+            <small>Listado de Plazas para nuevos docentes</small>
+          </h2>
+        </div>
+        <div class="col-lg-5 col-md-6 col-sm-12">
+          <ul class="breadcrumb float-md-right">
+            <li class="breadcrumb-item">
+              <a href="/"><i class="zmdi zmdi-home"></i>App</a>
+            </li>
+            <li class="breadcrumb-item"><a href="/">Gestión de docentes</a></li>
+            <li class="breadcrumb-item active">Plazas para nuevos docentes</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="container-fluid">
+      
+      <div class="row clearfix">
+        <div class="col-lg-12">
+          <div class="card">
+            <div class="header">
+              
+              <h2><strong>Proceso de solicitud de Plazas para nuevos Docentes 2022-1</strong></h2>
+            </div>
+            <div class="body">           
+              <input type="hidden" name="jwt" id="jwt" value="<%= jwt %>" />
+              <div class="irs-demo m-b-30 m-l-100 m-r-100"> 
+                <input type="text" id="range_09" value="" />
+              </div>
+              <div class="row clearfix pb-0 m-l-0 !important">
+                <div class=" col-md-2" id="from-date">
+                  <b>Fecha Inicio:</b>
+                  <div class="input-group">
+                    <span class="input-group-addon"
+                      ><i class="zmdi zmdi-calendar"></i>
+                    </span>
+                    <input 
+                      id = "beginning"
+                      type="text"
+                      class="form-control date"
+                      data-dtp="dtp_wghlr"
+                      required
+                    />
+                  </div>
+                </div>               
+                <div class="col-md-2" id="to-date">
+                  <b>Fecha Fin:</b>
+                  <div class="input-group">
+                    <span class="input-group-addon"
+                      ><i class="zmdi zmdi-calendar"></i>
+                    </span>
+                    <input 
+                      id = "end"
+                      type="text"
+                      class="form-control date"
+                      data-dtp="dtp_wghlr"
+                      required
+                    />
+                  </div>
+                </div> 
+              </div>
+              <div class="float-right m-t-15 m-r-15 !important">
+                <button type="button" id="btn-add-new-request" class="btn btn-primary" style="width:12.5em !important;" data-color-name="alert-warning"> 
+                  Solicitar 
+                </button>
+              </div>
+              <div class="float-right m-t-15 m-r-15 !important">
+                <button type="button" id="btn-edit-new-request" class="btn btn-primary" style="width:12.5em !important;" data-color-name="alert-warning"> 
+                  Editar 
+                </button>
+              </div>
+              <!-- <div class="float-right m-t-15 m-r-15 !important">
+                <button type="button" id="btn-edit-new-request" class="btn btn-info waves-effect margin-off" style="width:12.5em !important;" data-color-name="alert-warning"> 
+                  Editar 
+                </button>
+              </div> -->
+              <div class="col-md-3"> 
+                <b>Cantidad de plazas solicitadas</b>
+                <div class="form-group">
+                  <input type="number" id="input-places-new-teachers-request" class="form-control" placeholder="">
+                </div>
+              </div> 
+              <div class="col-md-3"> 
+                <b>Cantidad de plazas aprobadas por el Departamento</b>
+                <div class="form-group">
+                  <input type="number" id="input-places-teachers-request-dpto" class="form-control" placeholder="">
+                </div>
+              </div> 
+              <div class="col-md-3"> 
+                <b>Cantidad de plazas aprobadas por la DAP</b>
+                <div class="form-group">
+                  <input type="number" id="input-places-teachers-request-dap" class="form-control" placeholder="">
+                </div>
+              </div> 
+              <div class="col-lg-12 pt-3">
+                <label class="mb-1" for="description"><b>Justificación:</b>
+                  <!-- <span class="required-field">*</span> -->
+                </label>
+
+                <div class="form-group">
+                  <textarea id="description" rows="8" class="form-control no-resize" placeholder="Escriba el motivo de su solicitud" style="background-color: gainsboro"></textarea>
+                </div>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+       
+    <!-- #END# Exportable Table -->
+  </section>
+
+  <%- include('../partials/app/scripts', {view: 'sb-places-new-teachers-c'}); %>
+
+  <!-- Jquery DataTable Plugin Js -->
+  <script src="/light/assets/bundles/datatablescripts.bundle.js"></script>
+  <script src="/assets/plugins/jquery-datatable/buttons/dataTables.buttons.min.js"></script>
+  <script src="/assets/plugins/jquery-datatable/buttons/buttons.bootstrap4.min.js"></script>
+  <script src="/assets/plugins/jquery-datatable/buttons/buttons.colVis.min.js"></script>
+  <script src="/assets/plugins/jquery-datatable/buttons/buttons.html5.min.js"></script>
+  <script src="/assets/plugins/jquery-datatable/buttons/buttons.print.min.js"></script>
+
+  <script src="/assets/plugins/sweetalert/sweetalert.min.js"></script>
+  <script src="/light/assets/bundles/mainscripts.bundle.js"></script>
+  <script src="/assets/plugins/bootstrap-notify/bootstrap-notify.js"></script>
+  <script src="/assets/plugins/select2/select2.min.js"></script>
+  <script src="/assets/plugins/ion-rangeslider/js/ion.rangeSlider.js"></script> <!-- RangeSlider Plugin Js -->
+  <script src="/assets/plugins/momentjs/moment.js"></script>
+
+  <script>
+    var jwt = "<%= jwt %>";
+    var idSeccion = "<%= idSeccion %>"
+    var idDepartamento = "<%= idDepartamento %>"
+  </script>
+
+  <script src="/js/section-coordinator/places-new-teachers.js" type ="module"></script>
+
+</body>
+
+</html>

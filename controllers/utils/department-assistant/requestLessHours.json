@@ -1,0 +1,23 @@
+[
+    {
+        "idRequestLessHours": 1,
+        "date": "10/05/2021",
+        "teacher": "Eder Quispe", 
+        "requestedHours": 4, 
+        "approvedHours": 2
+    },
+    {
+        "idRequestLessHours": 2,
+        "date": "10/05/2021",
+        "teacher": "Eder Quispe", 
+        "requestedHours": 4, 
+        "approvedHours": 2
+    },
+    {
+        "idRequestLessHours": 3,
+        "date": "10/05/2021",
+        "teacher": "Eder Quispe", 
+        "requestedHours": 4, 
+        "approvedHours": 2
+    }
+]

@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html class="no-js" lang="es">
+
+<head>
+  <%- include('../partials/head', {title: 'Registro de Nuevo Trámite'}); %>
+
+  <link rel="stylesheet" href="/assets/plugins/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css" />
+  <link rel="stylesheet" href="/assets/plugins/dropzone/dropzone.css" />
+  <link rel="stylesheet" href="/assets/plugins/bootstrap-select/css/bootstrap-select.css" />
+  <link rel="stylesheet" href="/assets/plugins/select2/select2.css" />
+  <link rel="stylesheet" href="/assets/plugins/sweetalert/sweetalert.css" />
+  <link rel="stylesheet" href="/light/assets/css/main.css">
+
+  <script src="https://kit.fontawesome.com/c1c34b92ef.js" crossorigin="anonymous"></script>
+</head>
+
+<body class="theme-purple">
+  <%- include('../partials/app/header') %>
+  <%- include('../partials/app/topbar'); %>
+  <%- include('../partials/app/leftsidebar', {user}); %>
+
+  <section class="content">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-lg-7 col-md-6 col-sm-12">
+          <h2>Nuevo Trámite<small>Enviar un Nuevo Trámite a través de la Mesa de Partes
+            </small>
+          </h2>
+        </div>
+        <div class="col-lg-5 col-md-6 col-sm-12">
+          <ul class="breadcrumb float-md-right">
+            <li class="breadcrumb-item">
+              <a href="/"> <i class="zmdi zmdi-home"></i>App</a>
+            </li>
+            <li class="breadcrumb-item">
+              <a href="">Mesa de Partes</a>
+            </li>
+            <li class="breadcrumb-item active">Trámite</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="container-fluid">
+      <!-- Register User -->
+      <div class="row clearfix">
+        <div class="col-lg-12 col-md-12 col-sm-12">
+          <div class="card">
+            <div class="header">
+              <h2>
+                <strong>Complete los siguientes datos</strong>
+              </h2>
+            </div>
+            <div class="body">
+
+              <div class="row clearfix">
+                <div class="col-md-4">
+                  <label class="mb-1" for="receiver">Destinatario
+                    <span class="required-field">*</span>
+                  </label>
+                  <select class="form-control show-tick ms select2" name="receiver" id="receiver" data-placeholder="Seleccione un Departamento" required>
+                    <option></option>
+                    <% for (let department of departments) { %>
+                    <option value="<%= department.idDepartamento %>"><%= department.nombre %></option>
+                    <% } %>
+                  </select>
+                </div>
+                <div class="col-md-4">
+                  <label class="mb-1" for="category">Asunto
+                    <span class="required-field">*</span>
+                  </label>
+                  <select class="form-control show-tick ms select2" name="category" id="category" data-placeholder="Seleccione Asunto" required>
+                    <option></option>
+                    <% for (let category of categories) { %>
+                    <option value="<%= category.idAsunto %>">
+                      <%= category.nombre %>
+                    </option>
+                    <% } %>
+                  </select>
+                </div>
+
+                <div class="col-md-4">
+                  <label class="mb-1" for="requestType">Tipo de Trámite
+                    <span class="required-field">*</span></label>
+                  <select class="form-control show-tick ms select2" name="requestType" id="request-type" data-placeholder="Seleccione Tipo de Trámite" required>
+                    <option></option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="row clearfix pt-3">
+                <div class="col-md-4">
+                  <label for="firstName">Nombres <span class="required-field">*</span></label>
+                  <div class="form-group">
+                    <input type="text" class="form-control" name="firstName" id="first-name" placeholder="Ingrese los nombres del usuario" required />
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <label for="paternlastName">Apellido Paterno
+                    <span class="required-field">*</span></label>
+                  <div class="form-group">
+                    <input type="text" class="form-control" name="paternlastName" id="patern-last-name" placeholder="Ingrese el apellido paterno del usuario" required />
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <label for="email">Correo <span class="required-field">*</span></label>
+                  <div class="form-group">
+                    <input type="email" name="email" class="form-control" id="email" placeholder="Ingrese el correo PUCP del usuario" required />
+                  </div>
+                </div>
+              </div>
+
+              <div class="row clearfix pt-2">
+                <div class="col-md-4">
+                  <label class="mb-1" for="docType">Tipo de Documento</label>
+                  <select class="form-control show-tick ms select2" name="docType" id="doc-type" data-placeholder="Seleccione un Tipo de Documento" style="height: 38px !important;" required>
+                    <option></option>
+                    <option value="DNI">DNI</option>
+                    <option value="CE">CE</option>
+                  </select>
+                </div>
+
+                <div class="col-md-4">
+                  <label for="docNumber">Número de Documento</label>
+                  <div class="form-group">
+                    <input type="number" name="docNumber" class="form-control" id="doc-number" placeholder="Ingrese el número de documento del usuario" required />
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <label for="phone">Teléfono / Celular</label>
+                  <div class="form-group">
+                    <input type="number" name="phone" class="form-control" id="phone" placeholder="Ingrese el número telefónico del usuario" />
+                  </div>
+                </div>
+              </div>
+
+              <div class="row clearfix pt-3">
+                <div class="col-12 col-md-6">
+                  <label class="mb-1" for="description">Descripción
+                    <span class="required-field">*</span>
+                  </label>
+
+                  <div class="form-group">
+                    <textarea id="description" rows="4" class="form-control no-resize" placeholder="" style="background-color: #eeeeee"></textarea>
+                  </div>
+                </div>
+
+                <div class="col-12 col-md-6">
+                  <label class="mb-1" for="description">Anexos</label>
+                  <div class="table-responsive">
+                    <table id="files-uploaded" class="table table-bordered table-striped">
+                      <thead style="background-color: #167bc3; color: white">
+                        <tr>
+                          <th>Nombre de Archivo</th>
+                          <th>Acción</th>
+                        </tr>
+                      </thead>
+                      <tbody></tbody>
+                    </table>
+
+                    <div class="text-center" id="message-no-files">
+                      No hay archivos adjuntos
+                    </div>
+
+                    <div class="float-right">
+                      <button class="btn btn-primary waves-effect" data-toggle="modal" data-target="#loadFilesModal">
+                        Adjuntar Archivos
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row clearfix pt-2">
+                <div class="col-lg-12">
+                  <div class="float-right" style="padding-top: 10px !important">
+                    <a type="button" class="btn btn-danger waves-effect" href="/guest/">
+                      Cancelar
+                    </a>
+                    <button id="send-request" class="btn btn-primary ml-3">
+                      Enviar
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="modal fade show" id="loadFilesModal" tabindex="-1" role="dialog" aria-modal="true" style="display: none">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header" style="background-color: #167bc3">
+          <h4 class="title text-white">Carga de Archivos</h4>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-lg-12">
+              <form id="upload-files" method="post" class="dropzone">
+                <input type="hidden" name="_csrf" id="csrf" value="<%= csrfToken %>" />
+              </form>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <div class="float-left"></div>
+          <div class="float-right">
+            <button id="accept-files-uploaded" class="btn btn-primary btn-round waves-effect" data-dismiss="modal">
+              Aceptar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <%- include('../partials/app/scripts', {view: 'sb-table-request-guest'}); %>
+
+  <script src="/assets/plugins/momentjs/moment.js"></script>
+  <script src="/assets/plugins/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js"></script>
+  <script src="/assets/plugins/bootstrap-notify/bootstrap-notify.js"></script>
+  <script src="/light/assets/bundles/mainscripts.bundle.js"></script>
+  <script src="/assets/plugins/dropzone/dropzone.js"></script>
+  <script src="/assets/plugins/select2/select2.min.js"></script>
+  <script src="/assets/plugins/momentjs/moment.js"></script>
+  <script src="/assets/plugins/sweetalert/sweetalert.min.js"></script>
+
+  <script>
+    var categories = JSON.parse('<%- JSON.stringify(categories) %>');
+    var today = moment(new Date()).format("DD/MM/YYYY");
+  </script>
+
+  <script src="/js/guest/register-request.js" type="module"></script>
+</body>
+
+</html>

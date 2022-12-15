@@ -1,0 +1,345 @@
+<aside id="leftsidebar" class="sidebar">
+  <ul class="nav nav-tabs">
+    <li class="nav-item">
+      <a class="nav-link active" data-toggle="tab" href="#dashboard"><i class="zmdi zmdi-home m-r-5"></i>App</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" data-toggle="tab" href="#user"><i class="zmdi zmdi-account m-r-5"></i>Usuario</a>
+    </li>
+  </ul>
+  <div class="tab-content">
+    <div class="tab-pane stretchRight active" id="dashboard">
+      <div class="menu">
+        <ul class="list">
+          <li>
+            <div class="user-info">
+              <div class="image">
+                <a href="/">
+                  <% if (user.foto) { %>
+                  <img src="<%= user.foto %>" alt="Usuario" />
+                  <% } else { %>
+                  <img src="/images/user.jpg" alt="Usuario" />
+                  <% } %>
+                </a>
+              </div>
+              <div class="detail">
+                <h4><%= user.nombre + ' ' + user.apellidos %></h4>
+                <small><%= user.rol.replace('_', ' ') %></small>
+                <br />
+                <small><%= user.seccion?user.seccion:'' %></small>
+              </div>
+            </div>
+          </li>
+
+          <% if (user.rol !== 'VISITANTE') { %>
+          <li id="sb-home" class="mb-0 pb-0">
+            <a href="/" class="mb-0 pb-0"><i class="zmdi zmdi-home"></i><span>INICIO</span></a>
+          </li>
+          <% } else { %>
+          <li id="sb-home" class="mb-0 pb-0">
+            <a href="/guest/" class="mb-0 pb-0"><i class="zmdi zmdi-home"></i><span>INICIO</span></a>
+          </li>
+          <% } %>
+
+          <% if (user.rol === 'ADMINISTRADOR') { %>
+          <li>
+            <a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-accounts"></i><span>USUARIOS</span></a>
+            <ul class="ml-menu">
+              <li id="sb-register-user">
+                <a href="/admin/register-user">Registro Individual</a>
+              </li>
+              <li id="sb-list-users">
+                <a href="/admin/list-users">Listado de Usuarios</a>
+              </li>
+            </ul>
+          </li>
+          <% } %>
+
+
+          <% if (user.rol !== 'VISITANTE') { %>
+          <li>
+            <a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-email"></i><span>MESA DE PARTES</span></a>
+            <ul class="ml-menu">
+
+              <% if (['SECRETARIA'].includes(user.rol)) { %>
+              <li id="sb-list-requests">
+                <a href="/department-secretary/request-list">Buzón</a>
+              </li>
+              <% } %>
+
+              <% if (user.rol !== 'ADMINISTRADOR') { %>
+              <li id="sb-sent">
+                <a href="/any-user/requests-sent">Enviados</a>
+              </li>
+              <li id="sb-received">
+                <a href="/any-user/requests-received">Recibidos</a>
+              </li>
+              <li id="sb-register-request">
+                <a href="/any-user/register-request">Nueva Solicitud</a>
+              </li>
+              <% } else { %>
+              <li id="sb-matters-request">
+                <a href="/admin/matter">Gestión de Asuntos y Trámites</a>
+              </li>
+              <% } %>
+            </ul>
+          </li>
+          <% } else { %>
+          <li>
+            <a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-assignment"></i><span>MESA DE PARTES</span></a>
+            <ul class="ml-menu">
+              <li id="sb-guest-register-request">
+                <a href="/guest/register-request">Solicitud</a>
+              </li>
+            </ul>
+
+            <a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-receipt"></i><span>CONVOCATORIA</span></a>
+            <ul class="ml-menu">
+              <li id="sb-table-request-guest">
+                <a href="/guest/teaching-convocation">Postulación</a>
+              </li>
+            </ul>
+
+          </li>
+          <% } %>
+
+          <% if (['ASISTENTE_SECCION','COORDINADOR_SECCION', 'ASISTENTE_DEPARTAMENTO'].includes(user.rol)) { %>
+          <li>
+            <a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-book"></i><span>CURSOS</span></a>
+            <ul class="ml-menu">
+
+              <% if (['ASISTENTE_SECCION', 'COORDINADOR_SECCION'].includes(user.rol)) { %>
+              <li id="sb-courses-list">
+                <a href="/section-assistant/list-courses">Listado de Cursos</a>
+              </li>
+              <li id="sb-courses-register">
+                <a href="/section-assistant/register-course">Registro de Curso</a>
+              </li>
+              <% } %>
+
+              <% if (['ASISTENTE_DEPARTAMENTO'].includes(user.rol)) { %>
+              <li id="sb-teachers-list">
+                <a href="/department-assistant/list-teachers">Listado de Docentes</a>
+              </li>
+              <li id="sb-coursesDep-list">
+                <a href="/department-assistant/list-courses">Listado de Cursos (Departamento)</a>
+              </li>
+              <li id="sb-schedules-list">
+                <a href="/department-assistant/list-schedules">Listado de Horarios</a>
+              </li>
+              <% } %>
+
+            </ul>
+          </li>
+          <% } %>
+
+          <% if (['COORDINADOR_SECCION', 'ASISTENTE_SECCION', 'JEFE_DEPARTAMENTO', 'ASISTENTE_DEPARTAMENTO'].includes(user.rol)) { %>
+          <li>
+            <a href="javascript:void(0);" class="menu-toggle"><i class="material-icons">view_agenda</i><span>ASIGNACIÓN DE DOCENTES</span></a>
+            <ul class="ml-menu">
+              <% if (['COORDINADOR_SECCION', 'ASISTENTE_SECCION'].includes(user.rol)) { %>
+              <li id="sb-courses-to-assign">
+                <a href="/section-assistant/courses-to-assign">Cursos a ser asignados</a>
+              </li>
+              <% } %>
+              <% if (['JEFE_DEPARTAMENTO', 'ASISTENTE_DEPARTAMENTO'].includes(user.rol)) { %>
+              <li id="sb-assigned-courses">
+                <a href="/department-assistant/assigned-courses">Cursos asignados</a>
+              </li>
+              <% } %>
+            </ul>
+          </li>
+          <% } %>
+
+          <% if (['ADMINISTRADOR', 'ASISTENTE_DEPARTAMENTO', 'JEFE_DEPARTAMENTO'].includes(user.rol)) { %>
+          <li>
+            <a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-assignment"></i><span>SECCIONES</span></a>
+            <ul class="ml-menu">
+              <li id="sb-list-sections">
+                <a href="/department-assistant/list-sections">Listado de Secciones</a>
+              </li>
+              <li id="sb-register-section">
+                <a href="/department-assistant/register-section">Registro de Sección</a>
+              </li>
+            </ul>
+          </li>
+          <% } %>
+
+          <% if (['ASISTENTE_DEPARTAMENTO', 'JEFE_DEPARTAMENTO', 'COORDINADOR_SECCION', 'ASISTENTE_SECCION'].includes(user.rol)) { %>
+          <li>
+            <a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-assignment-account"></i><span>GESTIÓN DE DOCENTES</span></a>
+            <ul class="ml-menu">
+             
+              <% if (['ASISTENTE_DEPARTAMENTO', 'JEFE_DEPARTAMENTO'].includes(user.rol)){ %>
+              <li id="sb-list-professor">
+                <a href="/department-assistant/list-professor">Listado de Docentes</a>
+              </li>
+              <% } %>
+
+              <% if (['JEFE_DEPARTAMENTO', 'ASISTENTE_DEPARTAMENTO'].includes(user.rol)){ %>
+              <li id="sb-register-professor">
+                <a href="/department-assistant/register-professor">Registro de Docentes</a>
+              </li>
+              <% } %>
+
+              <% if (['ASISTENTE_DEPARTAMENTO', 'JEFE_DEPARTAMENTO'].includes(user.rol)) { %>
+
+              <li id="sb-register-indicator">
+                <a href="/department-assistant/register-indicator">Criterios evaluación docente</a>
+              </li>
+              <li id="sb-process-evaluation">
+                <a href="/department-assistant/process-evaluation">Proceso de evaluación docente</a>
+              </li>
+              <% } %>
+
+              <% if (!['ASISTENTE_SECCION','COORDINADOR_SECCION'].includes(user.rol)){ %>
+
+              <li id="sb-less-hours-list">
+                <a href="/department-assistant/list-less-hours">Descarga de docentes</a>
+              </li>
+              <li id="sb-ordinary-teaching">
+                <a href="/department-assistant/ordinary-teaching">Plazas para ingreso docencia ordinaria</a>
+              </li>
+              <li id="sb-less-hours-list-history">
+                <a href="/department-assistant/list-less-hours-history">Descarga de docentes Historico </a>
+              </li>
+              <li id="sb-places-new-teachers">
+                <a href="/department-assistant/places-new-teachers">Plazas para nuevos docentes</a>
+              </li>
+              <li id="sb-promotion-teachers">
+                <a href="/department-assistant/promotion-teachers">Plazas para ascenso de docentes</a>
+              </li>
+              <% } %>
+
+              <% if (['ASISTENTE_SECCION','COORDINADOR_SECCION'].includes(user.rol)){ %>
+              <li id="sb-list-teachers">
+                <a href="/section-coordinator/list-teachers">Listado Docentes</a>
+              </li>
+              <li id="sb-evaluation-teacher">
+                <a href="/section-coordinator/evaluation-teacher">Evaluación Docente</a>
+              </li>
+              <% } %>
+
+              <% if (['COORDINADOR_SECCION'].includes(user.rol)) { %>
+              <li id="sb-less-hours-list-c">
+                <a href="/section-coordinator/list-less-hours">Descarga de docentes</a>
+              </li>
+              <li id="sb-less-hours-list-history-c">
+                <a href="/section-coordinator/list-less-hours-history">Descarga de docentes Historico </a>
+              </li>
+              <li id="sb-places-new-teachers-c">
+                <a href="/section-coordinator/places-new-teachers">Plazas para nuevos docentes </a>
+              </li>
+
+              <li id="sb-cv-reception">
+                <a href="/section-coordinator/cv-reception">Convocatoria de nuevos docentes</a>
+              </li>
+              <li id="sb-ordinary-teaching-c">
+                <a href="/section-coordinator/ordinary-teaching">Plazas para ingreso docencia ordinaria </a>
+              </li>
+              <li id="sb-promotion-teachers">
+                <a href="/section-coordinator/promotion-teachers">Plazas para ascenso de docentes</a>
+              </li>
+              <!-- <li id="sb-list-teachers">
+                <a href="/section-coordinator/list-teachers">Listado Docentes Coo</a>
+              </li> -->
+              <% } %>
+            </ul>
+          </li>
+          <% } %>
+
+          <% if (['DOCENTE', 'COORDINADOR_SECCION', 'JEFE_DEPARTAMENTO'].includes(user.rol)) { %>
+          <li>
+            <a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-book"></i><span>DOCENTE</span></a>
+            <ul class="ml-menu">
+              <% if (['DOCENTE'].includes(user.rol)) { %>
+              <li id="sb-preferences-list">
+                <a href="/teacher/current-preferences">Listado de Preferencias</a>
+              </li>
+              <li id="sb-preferences-register">
+                <a href="/teacher/register-preferences">Registro de Preferencias</a>
+              </li>
+              <% } %>
+              <li id="sb-record">
+                <a href="/teacher/record">Mi Expediente</a>
+              </li>
+            </ul>
+          </li>
+          <% } %>
+
+          <% if (['ADMINISTRADOR'].includes(user.rol)) { %>
+          <li>
+            <a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-receipt"></i><span>UNIVERSIDAD</span></a>
+            <ul class="ml-menu">
+              <li id="sb-faculty">
+                <a href="/admin/faculty">Gestión de Facultades</a>
+              </li>
+              <li id="sb-cicle">
+                <a href="/admin/cicle">Gestión de Ciclos</a>
+              </li>
+              <li id="sb-list-departments">
+                <a href="/admin/list-departments">Gestión de Departamentos</a>
+              </li>
+            </ul>
+          </li>
+          <% } %>
+
+          <% if (['ASISTENTE_INVESTIGACION'].includes(user.rol)) { %>
+          <li>
+            <a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-chart"></i><span>INVESTIGACIONES</span></a>
+            <ul class="ml-menu">
+              <% if (['ASISTENTE_INVESTIGACION'].includes(user.rol)) { %>
+              <li id="sb-investigations-repository">
+                <a href="/investigation-assistant/investigations-repository">Repositorio de investigaciones</a>
+              </li>
+             
+              <% } %>
+            </ul>
+          </li>
+          <% } %>
+
+        </ul>
+      </div>
+    </div>
+    <div class="tab-pane stretchLeft" id="user">
+      <div class="menu">
+        <ul class="list">
+          <li>
+            <div class="user-info">
+              <div class="image">
+                <a href="/">
+                  <% if (user.foto) { %>
+                  <img src="<%= user.foto %>" alt="Usuario" />
+                  <% } else { %>
+                  <img src="/images/user.jpg" alt="Usuario" />
+                  <% } %>
+                </a>
+              </div>
+              <div class="detail">
+                <h4><%= user.nombre + ' ' + user.apellidos %></h4>
+                <small><%= user.rol.replace('_', ' ') %></small>
+                <br />
+                <% if(user.rol != 'ADMINISTRADOR') { %>
+                <small><%= user.seccion %></small>
+                <% } %>
+              </div>
+            </div>
+          </li>
+          <li>
+            <small class="text-muted">Correo Electrónico: </small>
+            <p style="word-wrap: break-word; font-size: 0.85vw"><%= user.correo %></p>
+            <hr />
+            <small class="text-muted">Celular: </small>
+            <p><%= user.celular.length>=7?user.celular:"-" %></p>
+            <hr />
+            <small class="text-muted">Dirección: </small>
+            <p style="word-wrap: break-word"><%= user.direccion? user.direccion:"-" %></p>
+            <hr />
+            <small class="text-muted">Reseña: </small>
+            <p style="word-wrap: break-word"><%= user.resenia?user.resenia:"-" %></p>
+            <hr /> 
+          </li>
+        </ul>
+      </div>
+    </div>
+</aside>

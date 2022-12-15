@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
+    <%- include('partials/head', {title: 'App Web: 404!'}); %>
+    <link rel="stylesheet" href="/light/assets/css/authentication.css">
+</head>
+
+<body class="theme-purple authentication sidebar-collapse">
+<%- include('partials/error/navbar') %>
+
+<div class="page-header">
+    <div class="page-header-image" style="background-image:url(/assets/images/login.jpg)"></div>
+    <div class="container">
+        <div class="col-md-12 content-center">
+            <div class="card-plain">
+                <form class="form" method="" action="">
+                    <div class="header">
+                        <div class="logo-container">
+                            <img src="/images/logo.png" alt="">
+                        </div>
+                        <h5>Error 404</h5>
+                        <span>Página no encontrada :(</span>
+                    </div>
+                    <div class="content">
+                        <div class="input-group input-lg">
+                            <input type="text" class="form-control" placeholder="Buscar Funcionalidad...">
+                            <span class="input-group-addon">
+                                <i class="zmdi zmdi-search"></i>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="footer text-center">
+                        <a href="/"
+                           class="btn btn-primary btn-round btn-lg btn-block waves-effect waves-light">Ir a Home</a>
+                        <h5><a href="" class="link">¿Necesitas Ayuda?</a></h5>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <%- include('partials/footer'); %>
+
+</div>
+
+<script src="/light/assets/bundles/libscripts.bundle.js"></script>
+<script src="/light/assets/bundles/vendorscripts.bundle.js"></script>
+</body>
+</html>

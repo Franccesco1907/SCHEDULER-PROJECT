@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html class="no-js" lang="es">
+
+<head>
+  <%- include('../../partials/head', {title: 'Registro de Usuario'}); %>
+  <link rel="stylesheet" href="/assets/plugins/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css" />
+
+  <link rel="stylesheet" href="/assets/plugins/select2/select2.css" />
+  <link rel="stylesheet" href="/assets/plugins/sweetalert/sweetalert.css" />
+  <link rel="stylesheet" href="/light/assets/css/main.css">
+
+  <script src="https://kit.fontawesome.com/c1c34b92ef.js" crossorigin="anonymous"></script>
+</head>
+
+<body class="theme-purple">
+  <%- include('../../partials/app/header') %> <%-
+    include('../../partials/app/topbar'); %> <%-
+    include('../../partials/app/leftsidebar', {user}); %>
+
+  <!-- Main Content -->
+  <section class="content">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-lg-7 col-md-6 col-sm-12">
+          <h2>
+            Registrar Nuevo Usuario<small>Esta vista aún está en mejora</small>
+          </h2>
+        </div>
+        <div class="col-lg-5 col-md-6 col-sm-12">
+          <ul class="breadcrumb float-md-right">
+            <li class="breadcrumb-item">
+              <a href="/"><i class="zmdi zmdi-home"></i>App</a>
+            </li>
+            <li class="breadcrumb-item">
+              <a href="">Gestión de Usuarios</a>
+            </li>
+            <li class="breadcrumb-item active">Registro Individual</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="container-fluid">
+      <!-- Register User -->
+      <div class="row clearfix">
+        <div class="col-lg-12 col-md-12 col-sm-12">
+          <div class="card">
+            <div class="header">
+              <h2><strong>Complete los siguientes datos</strong></h2>
+            </div>
+            <div class="body">
+              <input type="hidden" name="csrf" id="csrf" value="<%= csrfToken %>" />
+
+              <div class="row clearfix">
+                <div class="col-md-4">
+                  <label for="first-name">Nombres <span class="required-field">*</span></label>
+                  <div class="form-group">
+                    <input type="text" class="form-control" name="first-name" id="first-name" placeholder="Ingrese los nombres del usuario" required />
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <label for="patern-last-name">Apellido Paterno
+                    <span class="required-field">*</span></label>
+                  <div class="form-group">
+                    <input type="text" class="form-control" name="patern-last-name" id="patern-last-name" placeholder="Ingrese el apellido paterno del usuario" required />
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <label for="matern-last-name">Apellido Materno</label>
+                  <div class="form-group">
+                    <input type="text" class="form-control" name="matern-last-name" id="matern-last-name" placeholder="Ingrese el apellido materno del usuario"  />
+                  </div>
+                </div>
+              </div>
+
+              <div class="row clearfix pt-2">
+
+                <div class="col-md-4">
+                  <label class="mb-1" for="role">Rol <span class="required-field">*</span></label>
+                  <select class="form-control show-tick ms select2" name="role" id="role" data-placeholder="Seleccione un Rol" style="height: 38px !important;" required>
+                    <option></option>
+                    <% for (let role of roles ) { %>
+                    <option value="<%= role.idRol %>">
+                      <%= role.nombre.replace('_',' ') %>
+                    </option>
+                    <% } %>
+                  </select>
+                </div>
+
+                <div class="col-md-4">
+                  <label for="email">Correo <span class="required-field">*</span></label>
+                  <div class="form-group">
+                    <input type="email" name="email" class="form-control" id="email" placeholder="Ingrese el correo PUCP del usuario" required />
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <label for="birthday">Fecha de Nacimiento</label>
+                  <div class="input-group">
+                    <span class="input-group-addon">
+                      <i class="zmdi zmdi-calendar"></i>
+                    </span>
+                    <input type="text" class="form-control date" id="birthday" placeholder="Elija la fecha de nacimiento" data-dtp="dtp_wghlr"  />
+                  </div>
+                </div>
+              </div>
+
+              <div class="row clearfix pt-2">
+                <div class="col-md-4">
+                  <label class="mb-1" for="doc-type">Tipo de Documento</label>
+                  <select class="form-control show-tick ms select2" name="doc-type" id="doc-type" data-placeholder="Seleccione un Tipo de Documento" style="height: 38px !important;">
+                    <option></option>
+                    <option value='0'>DNI</option>
+                    <option value='1'>CE</option>
+                  </select>
+                </div>
+
+                <div class="col-md-4">
+                  <label for="doc-number">Número de Documento</label>
+                  <div class="form-group">
+                    <input type="number" name="doc-number" class="form-control" id="doc-number" placeholder="Ingrese el número de documento del usuario" required />
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <label for="phone">Teléfono / Celular</label>
+                  <div class="form-group">
+                    <input type="number" name="phone" class="form-control" id="phone" placeholder="Ingrese el número telefónico del usuario" />
+                  </div>
+                </div>
+              </div>
+
+              <div class="row clearfix pt-2">
+                <div class="col-md-4">
+                  <label class="mb-1" for="department">Departamento <span class="required-field">*</span></label>
+                  <select class="form-control show-tick ms select2" name="department" id="department" data-placeholder="Seleccione un Departamento" style="height: 38px !important;" required>
+                    <option></option>
+                    <% for (let department of departments ) { %>
+                    <option value="<%= department.idDepartamento %>">
+                      <%= department.nombre %>
+                    </option>
+                    <% } %>
+                  </select>
+                </div>
+
+                <div class="col-md-4">
+                  <label class="mb-1" for="section">Sección</label> 
+                  <select class="form-control show-tick ms select2" name="section" id="section" data-placeholder="Seleccione una Seccion" style="height: 38px !important;" >
+                    <option></option>
+                  </select>
+                </div>
+
+                <div class="col-md-4">
+                  <label for="gender" style="padding-top: 10px !important;">Sexo <span class="required-field">*</span></label>
+                  <div class="form-group">
+                    <div class="radio inlineblock m-r-20">
+                      <input type="radio" name="gender" id="male" class="with-gap" value="m" checked />
+                      <label for="male">Masculino</label>
+                    </div>
+                    <div class="radio inlineblock">
+                      <input type="radio" name="gender" id="female" class="with-gap" value="f" />
+                      <label for="female">Femenino</label>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+              <div class="row clearfix ">
+
+                <div class="col-md-4" id="divCode" style="display:none !important;">
+                  <label for="code" >Código PUCP <span class="required-field">*</span></label>
+                  <div class="form-group">
+                    <input type="text" name="code" class="form-control" id="code" placeholder="Ingrese el código PUCP del docente" required />
+                  </div>
+                </div>
+                <div class="col-md-4"  id="divDedication" style="display:none !important;">
+                  <label for="dedication">Dedicación <span class="required-field">*</span></label>
+                  <select class="form-control show-tick ms select2" name="dedication" id="dedication" data-placeholder="Seleccione la dedicación del docente" style="height: 38px !important;">
+                    <option></option>
+                    <option value="TC">TC</option>
+                    <option value="TPC">TPC</option>
+                    <option value="TPA">TPA</option>
+                  </select>
+                </div>
+
+                <div class="col-md-4"  id="divCategory" style="display:none !important;">
+                  <label for="category"> Categoría <span class="required-field">*</span></label>
+                  <select class="form-control show-tick ms select2" name="category" id="category" data-placeholder="Seleccione la categoría del docente" style="height: 38px !important;">
+                    <option></option>
+                    <option value="PRINCIPAL">PRINCIPAL</option>
+                    <option value="ASOCIADO">ASOCIADO</option>
+                    <option value="AUXILIAR">AUXILIAR</option>
+                    <option value="CONTRATADO">CONTRATADO</option>
+                    <option value="EXTRAORDINARIO">EXTRAORDINARIO</option>
+                  </select>
+                </div>
+
+              </div>
+
+              <div class="row clearfix ">
+
+                <div class="col-md-8">
+                  <label for="address">Dirección</label>
+                  <div class="form-group">
+                    <input type="text" name="address" class="form-control" id="address" placeholder="Ingrese la dirección del usuario" required />
+                  </div>
+                </div>
+              
+              </div>
+
+              <div class="float-right" style="padding-top: 10px !important; padding-bottom: 10px">
+                <a type="button" class="btn btn-danger waves-effect " href="/admin/list-users">
+                  Cancelar <!-- <i class="fas fa-undo pl-2"></i> -->
+                </a>
+                <button type="submit" class="btn  btn-primary waves-effect" id="register-user">
+                  Guardar Cambios 
+                </button>
+              </div>
+
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <%- include('../../partials/app/scripts', {view: 'sb-register-user'}); %>
+
+  <script src="/assets/plugins/momentjs/moment.js"></script>
+  <script src="/assets/plugins/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js"></script>
+  <script src="/assets/plugins/bootstrap-notify/bootstrap-notify.js"></script>
+  <script src="/assets/plugins/sweetalert/sweetalert.min.js"></script>
+  <script src="/assets/plugins/select2/select2.min.js"></script>
+  <script src="/light/assets/bundles/mainscripts.bundle.js"></script>
+
+  <script>
+    var jwt = "<%= jwt %>";
+    var today = moment(new Date()).format("DD/MM/YYYY"); 
+    let persona = JSON.parse(`<%- JSON.stringify(persona) %>`);
+    let departments = JSON.parse(`<%- JSON.stringify(departments) %>`); 
+    let roles = JSON.parse(`<%- JSON.stringify(roles) %>`); 
+  </script>
+
+  <script src="/js/user/admin/edit-user.js" type="module"></script>
+</body>

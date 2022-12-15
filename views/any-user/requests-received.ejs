@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+
+<head>
+  <%- include('../partials/head', {title: 'Trámites Recibidos'}); %>
+  <link rel="stylesheet" href="/assets/plugins/jquery-datatable/dataTables.bootstrap4.min.css" />
+  <link rel="stylesheet" href="/assets/plugins/select2/select2.css" />
+  <link rel="stylesheet" href="/light/assets/css/main.css">
+  <script src="https://kit.fontawesome.com/c1c34b92ef.js" crossorigin="anonymous"></script>
+
+  <style>
+    .request-selected {
+      background-color: #fff8b5 !important;
+    }
+  </style>
+</head>
+
+<body class="theme-purple">
+  <%- include('../partials/app/header') %>
+  <%- include('../partials/app/topbar'); %>
+  <%- include('../partials/app/leftsidebar', {user}); %>
+
+  <section class="content">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-lg-7 col-md-6 col-sm-12">
+          <h2>
+            Trámite
+            <small>Bandeja de Entrada por Mesa de Partes</small>
+          </h2>
+        </div>
+        <div class="col-lg-5 col-md-6 col-sm-12">
+          <ul class="breadcrumb float-md-right">
+            <li class="breadcrumb-item">
+              <a href="/"><i class="zmdi zmdi-home"></i>App</a>
+            </li>
+            <li class="breadcrumb-item"><a href="/">Mesa de Partes</a></li>
+            <li class="breadcrumb-item active">Recibidos</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="container-fluid">
+      <div class="row clearfix">
+        <div class="col-lg-12">
+          <div class="card">
+            <div class="header pb-1">
+              <h2><strong>Bandeja de Entrada</strong></h2>
+            </div>
+
+            <div class="body">
+              <div class="row clearfix pb-2">
+                <div class="col-lg-2 col-md-6">
+                  <b>Fecha:</b>
+                  <select id="date-select" class="form-control show-tick ms select2" style="height: 38px !important;">
+                    <option value="0" selected>Todos</option>
+                    <option value="1">Hoy</option>
+                    <option value="2">Esta Semana</option>
+                    <option value="3">Este Mes</option>
+                    <option value="4">Este Año</option>
+                    <option value="5">Rango de Fechas</option>
+                  </select>
+                </div>
+                <div class="col-lg-2 col-md-6" id="from-date">
+                  <b>Desde:</b>
+                  <div class="input-group">
+                    <span class="input-group-addon"><i class="zmdi zmdi-calendar"></i>
+                    </span>
+                    <input type="text" id="to" class="form-control date" placeholder="Ex: 01/08/2016" />
+                  </div>
+                </div>
+                <div class="col-lg-2 col-md-6" id="to-date">
+                  <b>Hasta:</b>
+                  <div class="input-group">
+                    <span class="input-group-addon"><i class="zmdi zmdi-calendar"></i>
+                    </span>
+                    <input type="text" id="to" class="form-control date" placeholder="Ex: 04/08/2016" />
+                  </div>
+                </div>
+              </div>
+
+              <div class="row clearfix pb-0">
+                <div class="col-lg-4 col-md-6">
+                  <b>Asunto:</b>
+                  <select class="form-control show-tick ms select2" name="receiver" id="matter" data-placeholder="Seleccione un asunto" style="height: 38px !important;" required>
+                    <option></option>
+                    <option value="TODOS">Todos</option>
+                    <% for (let subject of subjects) { %>
+                    <option value="<%= subject.idAsunto %>"><%= subject.nombre %></option>
+                    <% } %>
+                  </select>
+                </div>
+
+                <div class="col-lg-3 col-md-6">
+                  <b>Destinatario:</b>
+                  <div class="form-group">
+                    <input type="text" name="receiver" id="receiver" class="form-control" placeholder="" />
+                  </div>
+                </div>
+
+                <div class="col-lg-2 col-md-6">
+                  <b>Estado:</b>
+                  <select id="status" class="form-control show-tick ms select2" style="height: 38px !important;">
+                    <option></option>
+                    <option value="TODOS">Todos</option>
+                    <option value="EN_PROCESO">En Proceso</option>
+                    <option value="ATENDIDO">Atendido</option>
+                    <option value="RECHAZADO">Rechazado</option>
+                  </select>
+                </div>
+
+                <div class="col-lg-3">
+                  <div class="float-right">
+                    <button id="apply-filters" class="btn btn-info" style="margin-top: 20px !important">
+                      Aplicar Filtros
+                    </button>
+                    <button id="view-request" class="btn btn-primary m-t-20" data-placement-from="top" data-placement-align="center" data-color-name="alert-warning" style="margin-top: 20px !important">
+                      Ver trámite
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="table-responsive">
+                <table id="request-data-table" class="
+                      table table-bordered table-striped table-hover
+                      dataTable
+                      js-exportable
+                    ">
+                  <thead style="background-color: #167bc3; color: white">
+                    <tr>
+                      <th>Remitente</th>
+                      <th>Asunto</th>
+                      <th>Tipo Solicitud</th>
+                      <th>Fecha</th>
+                      <th>Estado</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <%- include('../partials/app/scripts', {view: 'sb-received'}); %>
+
+  <script src="/light/assets/bundles/datatablescripts.bundle.js"></script>
+  <script src="/assets/plugins/jquery-datatable/buttons/dataTables.buttons.min.js"></script>
+  <script src="/assets/plugins/jquery-datatable/buttons/buttons.bootstrap4.min.js"></script>
+  <script src="/assets/plugins/jquery-datatable/buttons/buttons.colVis.min.js"></script>
+  <script src="/assets/plugins/jquery-datatable/buttons/buttons.html5.min.js"></script>
+  <script src="/assets/plugins/jquery-datatable/buttons/buttons.print.min.js"></script>
+  <script src="/assets/plugins/momentjs/moment.js"></script>
+  <script src="/assets/plugins/bootstrap-notify/bootstrap-notify.js"></script>
+  <script src="/assets/plugins/select2/select2.min.js"></script>
+  <script src="/light/assets/bundles/mainscripts.bundle.js"></script>
+
+  <script>
+    var jwt = `<%= jwt %>`;
+    var idPersona = parseInt(`<%= user.idPersona %>`);
+  </script>
+
+  <script src="/js/any-user/requests-received.js" type="module"></script>
+</body>
+
+</html>

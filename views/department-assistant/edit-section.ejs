@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html class="no-js" lang="es">
+  <head>
+    <%- include('../partials/head', {title: 'Edición de una Sección'}); %>
+    <link
+      rel="stylesheet"
+      href="/assets/plugins/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css"
+    />
+    <link rel="stylesheet" href="/assets/plugins/sweetalert/sweetalert.css" />
+    <link rel="stylesheet" href="/assets/plugins/dropzone/dropzone.css" />
+    <link rel="stylesheet" href="/assets/plugins/select2/select2.css" />
+    <link rel="stylesheet" href="/light/assets/css/main.css">
+    <script
+      src="https://kit.fontawesome.com/c1c34b92ef.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <body class="theme-purple">
+    <%- include('../partials/app/header') %> <%-
+    include('../partials/app/topbar'); %> <%-
+    include('../partials/app/leftsidebar', {user}); %>
+
+    <!-- Main Content -->
+    <section class="content">
+      <div class="block-header">
+        <div class="row">
+          <div class="col-lg-7 col-md-6 col-sm-12">
+            <h2>
+              Secciones<small
+                >Editar sección
+              </small>
+            </h2>
+          </div>
+          <div class="col-lg-5 col-md-6 col-sm-12">
+            <ul class="breadcrumb float-md-right">
+              <li class="breadcrumb-item">
+                <a href="/"><i class="zmdi zmdi-home"></i>App</a>
+              </li>
+              <li class="breadcrumb-item">
+                <a href="">Secciones</a>
+              </li>
+              <li class="breadcrumb-item active">Registro de sección</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="container-fluid">
+        <!-- Register section -->
+        <div class="row clearfix">
+          <div class="col-lg-12 col-md-12 col-sm-12">
+            <div class="card">
+              <div class="header">
+                <h2><strong>Información de la sección</strong></h2>
+              </div>
+              <div class="body">
+                
+                    <input
+                    type="hidden"
+                    name="_csrf"
+                    id="_csrf"
+                    value="<%= csrfToken %>"
+                  />
+                  <div class="row clearfix">
+                    
+                    <div class="col-md-6">
+                        <label class="mb-1" for="sectionCode"
+                          >Código de la sección
+                          <span class="required-field">*</span></label
+                        >
+                        <div class="form-group">
+                          <input
+                            type="text"
+                            class="form-control"
+                            name="sectionCode"
+                            id="section-code"
+                            placeholder="Ingrese el código de la sección"
+                            required
+                          />
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="date-create"
+                          >Fecha de creación
+                          <span class="required-field">*</span></label
+                        >
+                        <div class="input-group">
+                          <span class="input-group-addon">
+                            <i class="zmdi zmdi-calendar"></i>
+                          </span>
+                          <input
+                            type="text"
+                            class="form-control date"
+                            id="date-create"
+                            placeholder="Elija la fecha de creación"
+                            data-dtp="dtp_wghlr"
+                            required
+                          />
+                        </div>
+                    </div>
+                  </div>
+                  <div class="row clearfix">
+                    <div class="col-md-6">
+                        <label class="mb-1" for="sectionName"
+                          >Nombre de la sección <span class="required-field">*</span></label
+                        >
+                        <div class="form-group">
+                          <input
+                            type="text"
+                            class="form-control"
+                            name="sectionName"
+                            id="section-name"
+                            placeholder="Ingrese el nombre de la sección"
+                            required
+                          />
+                        </div> 
+                    </div>
+                    <div class="col-md-6">
+                        <label class="mb-1" for="department"
+                          >Departamento al que pertenece</label
+                        >
+                        <select
+                          class="form-control show-tick ms select2"
+                          name="department"
+                          id="department"
+                          required
+                        
+                        >
+                          <% for (let department of departments ) { %>
+                            <option value="<%= department.idDepartamento %>">
+                                <%= department.nombre %>
+                            </option>
+                          <% } %>
+                      </select>
+                    </div>
+                  
+                     
+                    <div class="col-lg-12 pt-3">
+                      <label class="mb-1" for="description"
+                        >Descripción: </label
+                      >
+                      <div class="form-group">
+                        <textarea id="description"
+                          rows="4"
+                          class="form-control no-resize"
+                          placeholder=""
+                          style="background-color: gainsboro"
+                        ></textarea>
+                      </div>
+                    </div>
+
+                    <div class="col-lg-12">
+                      <div
+                        class="float-right"
+                        style="padding-top: 10px !important"
+                      >
+                        <a
+                          type="button"
+                          class="btn btn-danger waves-effect"
+                          href="/department-assistant/list-sections"
+                        >
+                          Cancelar
+                        </a>
+                        <button id="edit-section" class="btn btn-primary ml-3">
+                          Guardar cambios
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+               
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <%- include('../partials/app/scripts', {view: 'sb-register-section'}); %>
+
+    <script src="/assets/plugins/bootstrap-notify/bootstrap-notify.js"></script>
+    <script src="/light/assets/bundles/mainscripts.bundle.js"></script>
+    <script src="/assets/plugins/dropzone/dropzone.js"></script>
+    <script src="../assets/plugins/momentjs/moment.js"></script>
+    <script src="/assets/plugins/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js"></script>
+    <script src="/assets/plugins/sweetalert/sweetalert.min.js"></script>
+    <script src="/assets/plugins/select2/select2.min.js"></script>
+
+    <script>
+        var section = JSON.parse(`<%- JSON.stringify(section) %>`);
+        var jwt = "<%= jwt %>";
+        var idPersona = "<%= user.idPersona %>";
+        var idDepartamento = "<%= user.idDepartamento %>";
+        var user = JSON.parse('<%-JSON.stringify(user)%>');
+        console.log(user);
+    </script>
+
+    <script
+      src="/js/department-assistant/edit-section.js"
+      type="module"
+    ></script>
+  </body>
+</html>

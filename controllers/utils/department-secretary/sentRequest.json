@@ -1,0 +1,29 @@
+[
+    {
+        "idRequest": 1,
+        "sender": "Docente 1", 
+        "derived": "-", 
+        "category": "Profesores", 
+        "request": "Contrato a profesores extranjeros", 
+        "date": "08/09/2021", 
+        "status": "En Proceso"
+    },
+    {
+        "idRequest": 2,
+        "sender": "Docente 2", 
+        "derived": "Departamento de Ciencias", 
+        "category": "Proyecto de Innovación e Investigación", 
+        "request": "Contrato a profesores extranjeros", 
+        "date": "08/09/2021", 
+        "status": "Atendido"
+    },
+    {
+        "idRequest": 3,
+        "sender": "Docente 3", 
+        "derived": "-", 
+        "category": "Profesores", 
+        "request": "Contrato a profesores extranjeros", 
+        "date": "08/09/2021", 
+        "status": "Rechazado"
+    }
+]

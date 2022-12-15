@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+  <head>
+    <%- include('../partials/head', {title: 'Listado de Cursos'}); %>
+    <link
+      rel="stylesheet"
+      href="/assets/plugins/jquery-datatable/dataTables.bootstrap4.min.css"
+    />
+
+    <link rel="stylesheet" href="/assets/plugins/dropzone/dropzone.css" />
+
+    <script
+      src="https://kit.fontawesome.com/c1c34b92ef.js"
+      crossorigin="anonymous"
+    ></script>
+
+    <link rel="stylesheet" href="/assets/plugins/sweetalert/sweetalert.css" />
+
+    <link
+      rel="stylesheet"
+      href="/assets/plugins/bootstrap-select/css/bootstrap-select.css"
+    />
+
+    <style>
+      .course-selected {
+        background-color: #fff8b5 !important;
+      }
+
+      .modal {
+        /*padding-top: 50px !important;*/
+      }
+
+      #table-courses-preview thead th,
+      #table-courses-preview thead td {
+        padding: 8px 10px;
+        /* e.g. change 8x to 4px here */
+      }
+
+      #table-courses-preview tbody th,
+      #table-courses-preview tbody td {
+        padding: 4px 10px;
+        /* e.g. change 8x to 4px here */
+      }
+
+      .back-button{
+        margin-bottom: 15px;
+        color: #167bc3;
+      }
+    </style>
+  </head>
+
+  <body class="theme-purple">
+    <%- include('../partials/app/header') %> <%-
+    include('../partials/app/topbar'); %> <%-
+    include('../partials/app/leftsidebar', {user}); %>
+
+    <section class="content">
+      <div class="block-header">
+        <div class="row">
+          <div class="col-lg-7 col-md-6 col-sm-12">
+            <h2>
+              Cursos
+              <small>Detalle de Horarios</small>
+            </h2>
+          </div>
+          <div class="col-lg-5 col-md-6 col-sm-12">
+            <ul class="breadcrumb float-md-right">
+              <li class="breadcrumb-item">
+                <a href="/"><i class="zmdi zmdi-home"></i>App</a>
+              </li>
+              <li class="breadcrumb-item"><a href="/">Cursos</a></li>
+              <li class="breadcrumb-item active">Detalle de Horarios</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="container-fluid">
+        <!-- Exportable Table -->
+        <div class="row clearfix">
+          <div class="col-lg-12 col-md-12 col-sm-12">            
+            <div class="card">              
+              <div class="header">
+                <div class="row pt-2">
+                  <div class="col-sm-12">                    
+                    <div class="float-left">
+                      <div class="col">
+                        <div >
+                          <a type="button" class="back-button" href="/department-assistant/list-courses">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
+                              <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
+                            </svg>
+                            Atrás
+                          </a>
+                        </div>
+                        <div>
+                        </div>
+                        <h5><b>INF244 - Fundamentos de Programación (2021-2)</b></h5>
+                        <b>Créditos: 4.5</b><br/>
+                        <b>Horas teóricas: 3</b><br/>
+                        <b>Horas de práctica: 3</b>
+                      </div>                        
+                  </div>
+                </div>
+              </div>
+
+              <div class="body">
+                
+                <!-- Horarios de Clase -->
+                <div id="schedule-subtitle-and-table-class">
+                  <div class="row clearfix pb-0">
+                    <div class="col-lg-3 col-md-6">
+                      Horarios de Clase         
+                    </div>
+                  </div>
+                  <div class="table-responsive">
+                    <table
+                      id="schedules-data-table-class"
+                      class="
+                        table table-bordered table-striped table-hover
+                        dataTable
+                        js-exportable
+                      "
+                    >
+                      <thead style="background-color: #167bc3; color: white">
+                        <tr class="header-horarios">
+                          <th>Horario</th>
+                          <th>Código</th>
+                          <th>Docente</th>
+                          <th>Dedicación</th>
+                          <th>Categoría</th>
+                          <th>Total Carga de Horas</th>
+                          <th>Total Deuda de Horas</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <% for (let i = 0; i < courses.length; i++) { %>
+                          <!-- name have to be changed to code and the other round -->
+                          <tr class="courses-row" id="<%= courses[i].idCourse %>">
+                            <td><%= /*schedules[i].code || */ "0801" %></td>
+                            <td><%= /*schedules[i].teacher.code || */ "20051234" %></td>
+                            <td><%= /*schedules[i].teacher.name || */ "Juan Antonio López Aguilar" %></td>
+                            <td><%= /*schedules[i].teacher.dedication || */ "TC" %></td>
+                            <td><%= /*schedules[i].teacher.category || */ "AUXILIAR"  %></td>
+                            <td><%= /*schedules[i].teacher.load || */ "10 horas"  %></td>
+                            <td><%= /*schedules[i].teacher.debt || */ "2.5 horas"  %></td>
+                          </tr>
+                        <% } %>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                
+                <!-- Horarios de Práctica -->                
+                <div id="schedule-subtitle-and-table-practice">
+                  <div><br/></div>
+                  <div class="row clearfix pb-0">
+                    <div class="col-lg-3 col-md-6">
+                      Horarios de Práctica         
+                    </div>
+                  </div>
+                  <div class="table-responsive">
+                    <table
+                      id="schedules-data-table-practice"
+                      class="
+                        table table-bordered table-striped table-hover
+                        dataTable
+                        js-exportable
+                      "
+                    >
+                      <thead style="background-color: #167bc3; color: white">
+                        <tr class="header-horarios">
+                          <th>Horario</th>
+                          <th>Código</th>
+                          <th>Docente</th>
+                          <th>Dedicación</th>
+                          <th>Categoría</th>
+                          <th>Total Carga de Horas</th>
+                          <th>Total Deuda de Horas</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <% for (let i = 0; i < courses.length; i++) { %>
+                          <!-- name have to be changed to code and the other round -->
+                          <tr class="courses-row" id="<%= courses[i].idCourse %>">
+                            <td><%= /*schedules[i].code || */ "0801" %></td>
+                            <td><%= /*schedules[i].teacher.code || */ "20072154" %></td>
+                            <td><%= /*schedules[i].teacher.name || */ "José Carlos Pérez Ramírez" %></td>
+                            <td><%= /*schedules[i].teacher.dedication || */ "TPA" %></td>
+                            <td><%= /*schedules[i].teacher.category || */ "CONTRATADO"  %></td>
+                            <td><%= /*schedules[i].teacher.load || */ "5 horas"  %></td>
+                            <td><%= /*schedules[i].teacher.debt || */ "0 horas"  %></td>
+                          </tr>
+                        <% } %>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                
+                <!-- Horarios de Laboratorio -->
+                <div id="schedule-subtitle-and-table-lab">
+                  <div><br/></div>
+                  <div class="row clearfix pb-0">
+                    <div class="col-lg-3 col-md-6">
+                      Horarios de Laboratorio         
+                    </div>
+                  </div>
+                  <div class="table-responsive">
+                    <table
+                      id="schedules-data-table-lab"
+                      class="
+                        table table-bordered table-striped table-hover
+                        dataTable
+                        js-exportable
+                      "
+                    >
+                      <thead style="background-color: #167bc3; color: white">
+                        <tr class="header-horarios">
+                          <th>Horario</th>
+                          <th>Código</th>
+                          <th>Docente</th>
+                          <th>Dedicación</th>
+                          <th>Categoría</th>
+                          <th>Total Carga de Horas</th>
+                          <th>Total Deuda de Horas</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <% for (let i = 0; i < courses.length; i++) { %>
+                          <!-- name have to be changed to code and the other round -->
+                          <tr class="courses-row" id="<%= courses[i].idCourse %>">
+                            <td><%= /*schedules[i].code || */ "0801" %></td>
+                            <td><%= /*schedules[i].teacher.code || */ "20051234" %></td>
+                            <td><%= /*schedules[i].teacher.name || */ "Juan Antonio López Aguilar" %></td>
+                            <td><%= /*schedules[i].teacher.dedication || */ "TC" %></td>
+                            <td><%= /*schedules[i].teacher.category || */ "AUXILIAR"  %></td>
+                            <td><%= /*schedules[i].teacher.load || */ "10 horas"  %></td>
+                            <td><%= /*schedules[i].teacher.debt || */ "2.5 horas"  %></td>
+                          </tr>
+                        <% } %>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <!-- Horarios de Asesoría -->
+                <div><br/></div>
+                <div id="schedule-subtitle-and-table-advice">
+                  <div class="row clearfix pb-0">
+                    <div class="col-lg-3 col-md-6">
+                      Horarios de Asesoría         
+                    </div>
+                  </div>
+                  <div class="table-responsive">
+                    <table
+                      id="schedules-data-table-advice"
+                      class="
+                        table table-bordered table-striped table-hover
+                        dataTable
+                        js-exportable
+                      "
+                    >
+                      <thead style="background-color: #167bc3; color: white">
+                        <tr class="header-horarios">
+                          <th>Horario</th>
+                          <th>Código</th>
+                          <th>Docente</th>
+                          <th>Dedicación</th>
+                          <th>Categoría</th>
+                          <th>Total Carga de Horas</th>
+                          <th>Total Deuda de Horas</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <% for (let i = 0; i < courses.length; i++) { %>
+                          <!-- name have to be changed to code and the other round -->
+                          <tr class="courses-row" id="<%= courses[i].idCourse %>">
+                            <td><%= /*schedules[i].code || */ "0802" %></td>
+                            <td><%= /*schedules[i].teacher.code || */ "19984325" %></td>
+                            <td><%= /*schedules[i].teacher.name || */ "Luis Gonzalo Miguel Espinoza Pizarro" %></td>
+                            <td><%= /*schedules[i].teacher.dedication || */ "TC" %></td>
+                            <td><%= /*schedules[i].teacher.category || */ "PRINCIPAL"  %></td>
+                            <td><%= /*schedules[i].teacher.load || */ "10 horas"  %></td>
+                            <td><%= /*schedules[i].teacher.debt || */ "0.5 horas"  %></td>
+                          </tr>
+                        <% } %>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- #END# Exportable Table -->
+      </div>
+    </section>
+
+    
+    <%- include('../partials/app/scripts', {view: 'sb-coursesDep-list'}); %>
+
+    <!-- Jquery DataTable Plugin Js -->
+    <script src="/light/assets/bundles/datatablescripts.bundle.js"></script>
+    <script src="/assets/plugins/jquery-datatable/buttons/dataTables.buttons.min.js"></script>
+    <script src="/assets/plugins/jquery-datatable/buttons/buttons.bootstrap4.min.js"></script>
+    <script src="/assets/plugins/jquery-datatable/buttons/buttons.colVis.min.js"></script>
+    <script src="/assets/plugins/jquery-datatable/buttons/buttons.html5.min.js"></script>
+    <script src="/assets/plugins/jquery-datatable/buttons/buttons.print.min.js"></script>
+    <script src="/assets/plugins/dropzone/dropzone.js"></script>
+
+    <script src="/assets/plugins/sweetalert/sweetalert.min.js"></script>
+    <script src="/light/assets/bundles/mainscripts.bundle.js"></script>
+
+    <script>
+      var courses = <%- JSON.stringify(courses) %>;   
+
+      //var divHorariosLab = document.getElementById('schedule-subtitle-and-table-lab');
+      //divHorariosLab.style.visibility = "hidden";
+      //divHorariosLab.style.display = "none";
+
+    </script>
+
+    <script src="/js/department-assistant/list-courses-detail.js"></script>
+  </body>
+</html>

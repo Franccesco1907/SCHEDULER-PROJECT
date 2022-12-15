@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html class="no-js" lang="es">
+
+<head>
+  <%- include('../partials/head', {title: 'Portal de Visitante'}); %>
+
+  <link rel="stylesheet" href="/assets/plugins/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css" />
+  <link rel="stylesheet" href="/assets/plugins/dropzone/dropzone.css" />
+  <link rel="stylesheet" href="/assets/plugins/bootstrap-select/css/bootstrap-select.css" />
+  <link rel="stylesheet" href="/assets/plugins/select2/select2.css" />
+  <link rel="stylesheet" href="/assets/plugins/sweetalert/sweetalert.css" />
+  <link rel="stylesheet" href="/light/assets/css/main.css">
+
+  <script src="https://kit.fontawesome.com/c1c34b92ef.js" crossorigin="anonymous"></script>
+</head>
+
+<body class="theme-purple">
+  <%- include('../partials/app/header') %>
+  <%- include('../partials/app/topbar'); %>
+  <%- include('../partials/app/leftsidebar', {user}); %>
+
+  <!-- Main Content -->
+  <section class="content">
+    <!--Block Header-->
+    <div class="block-header">
+      <div class="row">
+        <div class="col-lg-7 col-md-6 col-sm-12">
+          <h2>
+            Portal del Invitado<small>¡Bienvenido al sistema de Departamentos de la PUCP!
+            </small>
+          </h2>
+        </div>
+        <div class="col-lg-5 col-md-6 col-sm-12">
+          <ul class="breadcrumb float-md-right">
+            <li class="breadcrumb-item">
+              <a href="/"> <i class="zmdi zmdi-home"></i>App</a>
+            </li>
+            <li class="breadcrumb-item active">Portal de Visitante</a>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <!--Body-->
+    <div class="container-fluid">
+      <div class="row clearfix">
+        <div class="col-lg-12 col-md-12 col-sm-12">
+          <div class="card">
+            <div class="header">
+              <h2>
+                <strong>Seleccione la opción que desee</strong>
+              </h2>
+            </div>
+            <div class="body">
+
+              <div class="row clearfix">
+                <div class="col-lg-12 col-md-12">
+                  <div class="row clearfix">
+                    <div class="col-lg-12">
+                      <div class="card">
+                        <ul class="row profile_state list-unstyled">
+                          <li class="col-lg-4 col-md-4 col-6">
+                            <div class="body">
+                              <img src="/images/tramite-documento.png" alt="" height=100>
+                              <h4 class="mb-2">Consulte el Estado de sus Trámites</h4>
+
+                              <div class="row clearfix">
+                                <div class="col-lg-12">
+                                  <div class="form-group">
+                                    <input type="text" class="form-control" id="request-code" placeholder="Código de Trámite" />
+                                  </div>
+                                  <div class="form-group">
+                                    <input type="email" class="form-control" id="email" placeholder="Correo Electrónico" />
+                                  </div>
+                                </div>
+                              </div>
+                              <!--
+                              <div class="form-group">
+                                <input type="text" class="form-control pb-3" id="request-code" placeholder="Ingrese el código de su Trámite" />
+                                <input type="email" class="form-control" id="email" placeholder="Ingrese su correo electrónico" />
+                              </div>
+                              -->
+                              <button id="consult-request" class="btn btn-primary">
+                                Consultar
+                              </button>
+                            </div>
+                          </li>
+                          <li class="col-lg-4 col-md-4 col-6">
+                            <div class="body">
+                              <img src="/images/registro-tramite.png" alt="" height=100>
+                              <h4>Registre un Nuevo Trámite</h4>
+                              <a href="/guest/register-request" type="button" class="btn btn-primary mt-4">
+                                Nuevo Trámite
+                              </a>
+                            </div>
+                          </li>
+                          <li class="col-lg-4 col-md-4 col-6">
+                            <div class="body">
+                              <img src="/images/convocatoria.png" alt="" height=100>
+                              <h4>Postule como nuevo docente</h4>
+                              </div>
+                              <a href="/guest/select-convocation" type="button" class="btn btn-primary">
+                                Postular
+                              </a>
+                            </div>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <%- include('../partials/app/scripts', {view: 'sb-home'}); %>
+
+  <script src="/assets/plugins/momentjs/moment.js"></script>
+  <script src="/assets/plugins/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js"></script>
+  <script src="/assets/plugins/bootstrap-notify/bootstrap-notify.js"></script>
+  <script src="/light/assets/bundles/mainscripts.bundle.js"></script>
+  <script src="/assets/plugins/dropzone/dropzone.js"></script>
+  <script src="/assets/plugins/select2/select2.min.js"></script>
+  <script src="/assets/plugins/momentjs/moment.js"></script>
+  <script src="/assets/plugins/sweetalert/sweetalert.min.js"></script>
+
+  <script src="/js/guest/main.js" type="module"></script>
+</body>
+
+</html>

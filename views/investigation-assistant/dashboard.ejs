@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+
+<head>
+  <%- include('../partials/head', {title: 'Docentes a Asignar'}); %>
+  <link rel="stylesheet" href="/assets/plugins/jquery-datatable/dataTables.bootstrap4.min.css" />
+
+  <script src="https://kit.fontawesome.com/c1c34b92ef.js" crossorigin="anonymous"></script>
+
+  <link rel="stylesheet" href="/assets/plugins/sweetalert/sweetalert.css" />
+
+  <link rel="stylesheet" href="/assets/plugins/bootstrap-select/css/bootstrap-select.css" />
+
+  <link rel="stylesheet" href="/assets/plugins/bootstrap-tagsinput/bootstrap-tagsinput.css">
+
+
+  <style>
+    .teacher-no-assigned-selected {
+      background-color: #FFF8B5 !important;
+    }
+
+    .teacher-assigned-selected {
+      background-color: #FFF8B5 !important;
+    }
+
+    .modal {
+      /*padding-top: 50px !important;*/
+    }
+
+    #table-courses-preview thead th,
+    #table-courses-preview thead td {
+      padding: 8px 10px;
+      /* e.g. change 8x to 4px here */
+    }
+
+    #table-courses-preview tbody th,
+    #table-courses-preview tbody td {
+      padding: 4px 10px;
+      /* e.g. change 8x to 4px here */
+    }
+  </style>
+</head>
+
+<body class="theme-purple">
+  <%- include('../partials/app/header') %>
+  <%- include('../partials/app/topbar'); %>
+  <%- include('../partials/app/leftsidebar', {user}); %>
+
+  <section class="content">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-lg-7 col-md-6 col-sm-12">
+          <h2>
+            Dashboard de investigaciones
+            <small>Resumen de lo que se tiene en el repositorio</small>
+          </h2>
+        </div>
+        <div class="col-lg-5 col-md-6 col-sm-12">
+          <ul class="breadcrumb float-md-right">
+            <li class="breadcrumb-item">
+              <a href="/"><i class="zmdi zmdi-home"></i>App</a>
+            </li>
+            <li class="breadcrumb-item"><a href="/">Investigaciones</a></li>
+            <li class="breadcrumb-item active">Dashboard de investigaciones</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="container-fluid">
+      <!-- Exportable Table -->
+      <div class="row clearfix">
+        <div class="col-lg-12">
+          <div class="card">
+            <div class="header">
+              <h2><strong> Resumen visual</strong></h2>
+            </div>
+
+            <div class="body">
+              <div class="row clearfix">  
+                <div class="col-12 col-md-6">
+
+                    <canvas id="bar_chart" height="210" width="421" style="display: block; width: 421px; height: 210px;"></canvas>
+                </div>
+
+                <div class="col-12 col-md-6">
+
+                  <div class="table-responsive">
+                    <table id="teachers-assigned-data-table" class="table table-bordered table-striped">
+                      <thead style="background-color: #167bc3; color: white">
+                        <tr>
+                          <th>Nombre del docente</th>
+                          <th>Sección</th>
+                          <th>Cantidad de investigaciones</th>
+                        </tr>
+                      </thead>
+                      <tbody></tbody>
+                    </table>
+                  </div>
+                   <!-- #END# Exportable Table -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+     
+    </div>
+  </section>
+
+
+
+  <%- include('../partials/app/scripts', {view: 'sb-dashboard'}); %>
+
+  <!-- Jquery DataTable Plugin Js -->
+  <script src="/light/assets/bundles/datatablescripts.bundle.js"></script>
+  <script src="/assets/plugins/jquery-datatable/buttons/dataTables.buttons.min.js"></script>
+  <script src="/assets/plugins/jquery-datatable/buttons/buttons.bootstrap4.min.js"></script>
+  <script src="/assets/plugins/jquery-datatable/buttons/buttons.colVis.min.js"></script>
+  <script src="/assets/plugins/jquery-datatable/buttons/buttons.html5.min.js"></script>
+  <script src="/assets/plugins/jquery-datatable/buttons/buttons.print.min.js"></script>
+  <script src="/assets/plugins/bootstrap-notify/bootstrap-notify.js"></script>
+
+  <script src="/assets/plugins/sweetalert/sweetalert.min.js"></script>
+  <script src="/light/assets/bundles/mainscripts.bundle.js"></script>
+  <script src="../assets/plugins/chartjs/Chart.bundle.js"></script>
+
+  <script>
+   
+    var jwt = `<%= jwt %>`;
+    var sections = JSON.parse('<%-JSON.stringify(sections)%>');
+  </script>
+
+  <script src="/js/investigation-assistant/dashboard.js" type="module"></script>
+
+</body>
+
+</html>

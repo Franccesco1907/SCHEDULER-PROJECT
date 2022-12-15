@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html class="no-js" lang="es">
+
+<head>
+  <%- include('../partials/head', {title: 'Edición de Curso'}); %>
+
+  <link rel="stylesheet" href="/assets/plugins/select2/select2.css" />
+  <link rel="stylesheet" href="/assets/plugins/sweetalert/sweetalert.css" />
+  <link rel="stylesheet" href="/light/assets/css/main.css">
+
+  <script src="https://kit.fontawesome.com/c1c34b92ef.js" crossorigin="anonymous"></script>
+
+  <style>
+    .schedule-selected {
+      background-color: #fff8b5 !important;
+    }
+
+    .modal {
+      padding-top: 250px !important;
+    }
+  </style>
+</head>
+
+<body class="theme-purple">
+  <%- include('../partials/app/header') %>
+  <%- include('../partials/app/topbar'); %>
+  <%- include('../partials/app/leftsidebar', {user}); %>
+
+  <!-- Main Content -->
+  <section class="content">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-lg-7 col-md-6 col-sm-12">
+          <h2>Mantenimiento de Cursos<small>Actualice los datos de un cursos y sus horarios</small>
+          </h2>
+        </div>
+        <div class="col-lg-5 col-md-6 col-sm-12">
+          <ul class="breadcrumb float-md-right">
+            <li class="breadcrumb-item">
+              <a href="/"><i class="zmdi zmdi-home"></i>App</a>
+            </li>
+            <li class="breadcrumb-item"><a href="">Cursos</a></li>
+            <li class="breadcrumb-item active">Edición de Curso</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="container-fluid">
+      <!-- Register User -->
+      <div class="row clearfix">
+        <div class="col-lg-12 col-md-12 col-sm-12">
+          <div class="card">
+            <div class="header">
+              <h2><strong>Información del Curso</strong></h2>
+            </div>
+            <div class="body">
+              <input type="hidden" name="_csrf" id="_csrf" value="<%= csrfToken %>" />
+              <div class="row clearfix">
+                <div class="col-md-4">
+                  <label for="courseCode">Código <span class="required-field">*</span></label>
+                  <div class="form-group">
+                    <input type="text" class="form-control" name="courseCode" id="course-code" placeholder="Ingrese el código del Curso" maxlength="6" required />
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <label for="courseName">Nombre del Curso
+                    <span class="required-field">*</span></label>
+                  <div class="form-group">
+                    <input type="text" class="form-control" name="courseName" id="course-name" placeholder="Ingrese el nombre del curso" required />
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <label for="credits">Créditos <span class="required-field">*</span></label>
+                  <div class="form-group">
+                    <input type="number" name="credits" class="form-control" id="credits" placeholder="Ingrese la cantidad de créditos del curso" required />
+                  </div>
+                </div>
+              </div>
+              <div class="row clearfix">
+                <div class="col-md-4">
+                  <label for="faculty">Facultad
+                    <span class="required-field">*</span></label>
+                  <select class="form-control show-tick ms select2" name="faculty" id="faculty" data-placeholder="Seleccione la Facultad" required>
+                    <option></option>
+                    <% for (let faculty of faculties) { %>
+                    <option value="<%= faculty.idFacultad %>"><%= faculty.nombre %></option>
+                    <% } %>
+                  </select>
+                </div>
+                <div class="col-md-4">
+                  <label for="weekly-hours">Horas de clase <span class="required-field">*</span></label>
+                  <div class="form-group">
+                    <input type="number" name="weekly-hours" class="form-control" id="weekly-hours" placeholder="Ingrese la cantidad de horas semanales del curso" required />
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <label for="lab-hours">Horas de laboratorio
+                    <!-- <span class="required-field">*</span>-->
+                  </label>
+                  <div class="form-group">
+                    <input type="number" name="lab-hours" class="form-control" id="lab-hours" placeholder="Ingrese la cantidad de horas de laboratorio" />
+                  </div>
+                </div>
+              </div>
+              <div class="row clearfix">
+                <div class="col-md-4">
+                  <label for="practice-hours">Horas de practica
+                    <!-- <span class="required-field">*</span>-->
+                  </label>
+                  <div class="form-group">
+                    <input type="number" name="practice-hours" class="form-control" id="practice-hours" placeholder="Ingrese la cantidad de horas de practicas" />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="header">
+              <h2><strong>Horarios del Curso</strong></h2>
+            </div>
+            <div class="body">
+              <div class="row clearfix">
+                <div class="col-md-4">
+                  <label class="mb-1" for="semester">Ciclo</label>
+                  <select class="form-control show-tick ms select2" name="semester" id="semester" data-placeholder="Seleccione un ciclo" required>
+                    <% for (let semester of semesters) { %>
+                    <option value="<%= semester.idCiclo %>"><%= semester.nombre %></option>
+                    <% } %>
+                  </select>
+                </div>
+
+                <div class="col-md-8">
+                  <div class="float-right" style="padding-top: 21px !important">
+                    <button id="delete-schedule-modal" class="btn btn-danger waves-effect">
+                      Eliminar
+                      <!--
+                      <i class="fas fa-times pl-2"></i> 
+                        -->
+                    </button>
+                    <button id="edit-schedule-modal" class="btn btn-info waves-effect">
+                      Editar
+                      <!--  <i class="fas fa-edit pl-2"></i> -->
+                    </button>
+                    <button id="add-schedule-modal" class="btn btn-primary">
+                      Agregar
+                      <!-- <i class="fas fa-plus pl-2"></i> -->
+                    </button>
+                  </div>
+                </div>
+
+                <div class="col-lg-12" style="padding-top: 10px !important">
+                  <div class="table-responsive">
+                    <table class="table table-bordered">
+                      <thead style="background-color: #167bc3; color: white">
+                        <tr>
+                          <th>Ciclo</th>
+                          <th>Código de Horario</th>
+                          <th>Tipo de Horario</th>
+                        </tr>
+                      </thead>
+                      <tbody id="semester-data"></tbody>
+                    </table>
+
+                    <div class="text-center" id="message-no-schedule">
+                      No se han agregado horarios
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-lg-12">
+                  <div class="float-right" style="padding-top: 10px !important">
+                    <a type="button" class="btn btn-danger waves-effect" href="/section-assistant/list-courses">
+                      Cancelar
+                      <!-- <i class="fas fa-undo pl-2"></i> -->
+                    </a>
+                    <button id="save-course" class="btn btn-primary">
+                      Guardar Cambios
+                      <!-- <i class="fas fa-save pl-2"></i> -->
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="modal fade show" id="addScheduleModal" tabindex="-1" role="dialog" style="display: none" aria-modal="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header" style="background-color: #167bc3">
+          <h4 class="title pt-10 text-white"></h4>
+        </div>
+        <form class="form-horizontal" action="" id="add-schedule-form">
+          <div class="modal-body">
+            <div class="row clearfix">
+              <div class="col-lg-3 col-md-2 col-sm-5 form-control-label">
+                <label for="schedule-code"> Código <span class="required-field">*</span></label>
+              </div>
+              <div class="col-lg-9 col-md-10 col-sm-7">
+                <div class="form-group">
+                  <input type="text" name="scheduleCode" id="schedule-code" class="form-control" placeholder="Ingrese el código del horario" required />
+                </div>
+              </div>
+            </div>
+            <div class="row clearfix">
+              <div class="col-lg-3 col-md-2 col-sm-5 form-control-label">
+                <label for="scheduleType">Tipo de Horario
+                  <span class="required-field">*</span></label>
+              </div>
+              <div class="col-lg-9 col-md-10 col-sm-7">
+                <select class="form-control show-tick ms select2" name="scheduleType" id="schedule-type" data-placeholder="Seleccione el Tipo de Horario" style="height: 37px !important;" required>
+                  <option value=""></option>
+                  <option value="CLASE">CLASE</option>
+                  <option value="LABORATORIO">LABORATORIO</option>
+                  <option value="PRACTICA">PRÁCTICA</option>
+                  <option value="ASESORIA">ASESORÍA</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <div class="float-left">
+              <button class="btn btn-danger btn-round waves-effect" data-dismiss="modal">
+                Cancelar
+              </button>
+            </div>
+            <div class="float-right">
+              <button id="add-schedule" type="submit" class="btn btn-primary btn-round waves-effect"></button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade show" id="deleteScheduleModal" tabindex="-1" role="dialog" style="display: none" aria-modal="true">
+    <div class="modal-dialog modal-sm" role="document">
+      <div class="modal-content">
+        <div class="modal-header bg-red">
+          <h4 class="title pt-10">
+            Eliminar Horario<i class="far fa-calendar-times pl-2"></i>
+          </h4>
+        </div>
+        <div class="modal-body"></div>
+        <div class="modal-footer">
+          <div class="float-left">
+            <button id="close-remove-schedule-modal" class="
+                  btn btn-danger btn-round
+                  waves-effect
+                  justify-content-center
+                " data-dismiss="modal">
+              Cancelar
+            </button>
+          </div>
+
+          <div class="float-right">
+            <button id="delete-schedule" class="
+                  btn btn-primary btn-round
+                  waves-effect
+                  justify-content-center
+                ">
+              Eliminar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <%- include('../partials/app/scripts', {view: 'sb-courses-register'}); %>
+
+  <script src="/assets/plugins/bootstrap-notify/bootstrap-notify.js"></script>
+  <script src="/light/assets/bundles/mainscripts.bundle.js"></script>
+  <script src="/assets/plugins/sweetalert/sweetalert.min.js"></script>
+  <script src="/assets/plugins/select2/select2.min.js"></script>
+
+  <script>
+    var semesters = JSON.parse(`<%- JSON.stringify(semesters) %>`);
+    var course = JSON.parse(`<%- JSON.stringify(course) %>`);
+    var idSeccion = `<%= user.idSeccion %>`;
+    var idDepartamento = `<%= user.idDepartamento %>`;
+    var jwt = `<%= jwt %>`;
+  </script>
+
+  <script src="/js/section-assistant/edit-course.js" type="module"></script>
+</body>
+
+</html>

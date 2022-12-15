@@ -1,0 +1,1 @@
+module.exports = "mongodb://PeaceAndFlowers:vA2GQXpo2%215RthcdLKvngQG%25sEB%2afF%25%40@34.192.199.128:45784/?authSource=admin&readPreference=primary&appname=MongoDB%20Compass&directConnection=true&ssl=false";

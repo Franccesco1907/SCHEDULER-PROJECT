@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html class="no-js" lang="es">
+
+<head>
+  <%- include('../partials/head', {title: 'Detalle de Trámite'}); %>
+  <link rel="stylesheet" href="/assets/plugins/select2/select2.css" />
+  <link rel="stylesheet" href="/light/assets/css/main.css">
+  <link rel="stylesheet" href="/assets/plugins/sweetalert/sweetalert.css" />
+
+  <script src="https://kit.fontawesome.com/c1c34b92ef.js" crossorigin="anonymous"></script>
+
+  <style>
+    input[type="radio"] {
+      border: 0px;
+      width: 60%;
+      height: 2em;
+    }
+  </style>
+</head>
+
+<body class="theme-purple">
+  <%- include('../partials/app/header') %> <%-
+    include('../partials/app/topbar'); %> <%-
+    include('../partials/app/leftsidebar', {user}); %>
+
+  <!-- Main Content -->
+  <section class="content">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-lg-7 col-md-6 col-sm-12">
+          <h2>
+            Trámite
+            <small>Detalle de Trámite enviado por Mesa de Partes</small>
+          </h2>
+        </div>
+        <div class="col-lg-5 col-md-6 col-sm-12">
+          <ul class="breadcrumb float-md-right">
+            <li class="breadcrumb-item">
+              <a href="/"><i class="zmdi zmdi-home"></i>App</a>
+            </li>
+            <li class="breadcrumb-item"><a href="">Buzón</a></li>
+            <li class="breadcrumb-item active">Ver Trámite</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="container-fluid">
+      <!-- Register User -->
+      <div class="row clearfix">
+        <div class="col-lg-12 col-md-12 col-sm-12">
+          <div class="card">
+            <div class="body">
+              <div class="row clearfix">
+                <div class="col-lg-3">
+                  <b>Estado:</b>
+                  <select class="form-control show-tick ms select2" id="status">
+                    <option value="EN_PROCESO">En Proceso</option>
+                    <option value="ATENDIDO">Atendido</option>
+                    <option value="RECHAZADO">Rechazado</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="card mt-3" style="
+                    border-style: solid !important;
+                    border-width: 1px !important;
+                  ">
+                <div class="body">
+                  <div class="row clearfix">
+                    <div class="col-lg-12">
+                      <%= emisor %>
+                    </div>
+
+                    <div class="col-lg-12">
+                      <b>(<%= request.asunto %>) <%= request.tipoSolicitud %></b>
+                    </div>
+                  </div>
+
+                  <hr color="black" />
+
+                  <div class="row clearfix">
+                    <div class="col-lg-12">
+                      <p class="text">
+                        <%= request.descripcion || "Descripcion" %>
+                      </p>
+                    </div>
+
+                    <div class="col-lg-12">
+                      <b>Observaciones:</b>
+                      <div class="form-group">
+                        <div class="form-line">
+                          <textarea id="observations" rows="4" class="form-control no-resize" placeholder="Por favor ingrese sus observaciones" style="background-color: gainsboro"><%= request.observaciones %></textarea>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <hr color="black" />
+
+                  <div class="row clearfix">
+                    <div class="col-lg-2 text">Archivos Adjuntos:</div>
+                    <div class="col-lg-10">
+                      <div class="float-left">
+                        <% for (let file of request.anexosSolicitud) { %>
+                        <a class="btn btn-info" href="/files/requests/<%= file.filename %>" download="<%= file.originalName %>"><%= file.originalName %><i class="fas fa-file pl-2"></i>
+                        </a>
+                        <% } %>
+                      </div>
+                    </div>
+                  </div>
+
+                  <hr color="black" />
+
+                  <div class="row clearfix">
+                    <div class="col-lg-1 form-control-label">
+                      <label for="derivated">Derivado a:</label>
+                    </div>
+                    <div class="col-lg-5">
+                      <div class="form-group">
+                        <input type="text" id="derivated-to" class="form-control" placeholder="<%= request.enviadoA %>" readonly />
+                      </div>
+                    </div>
+                    <div class="col-lg-6" id="secretary-line">
+                      <div class="float-right">
+                        <button class="btn btn-primary" data-toggle="modal" data-target="#derivateModal" id="btn-derivate">
+                          Derivar
+                        </button>
+                        <button class="btn btn-primary" id="save-changes">
+                          Guardar Cambios
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="modal fade show" id="derivateModal" tabindex="-1" role="dialog" aria-modal="true" style="display: none">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header" style="background-color: #167bc3">
+          <h4 class="title text-white">Derivar: <%= request.asunto %></h4>
+        </div>
+        <div class="modal-body">
+          <!-- Nav tabs -->
+          <ul class="nav nav-tabs" role="tablist">
+            <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#home_with_icon_title"> <i class="zmdi zmdi-account"></i> USUARIO </a></li>
+            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#profile_with_icon_title"><i class="zmdi zmdi-book"></i> DEPARTAMENTO </a></li>
+            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#messages_with_icon_title"><i class="zmdi zmdi-email"></i> CORREO </a></li>
+          </ul>
+
+          <!-- Tab panes -->
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane in active" id="home_with_icon_title">
+              <label class="mb-1" for="receiver">Seleccione un Usuario
+                <span class="required-field">*</span>
+              </label>
+              <select class="form-control show-tick ms select2" name="receiver" id="receiver_user" data-placeholder="Seleccione un Usuario" required>
+                <option></option>
+                <% for (let user of users) { %>
+                <option value="<%= user.idPersona %>"><%= user.nombre + ' ' + user.apellidos %></option>
+                <% } %>
+              </select>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="profile_with_icon_title">
+              <label class="mb-1" for="receiver">Seleccione un Departamento
+                <span class="required-field">*</span>
+              </label>
+              <select class="form-control show-tick ms select2" name="receiver" id="receiver_department" data-placeholder="Seleccione un Departamento" required>
+                <option></option>
+                <% for (let department of departments) { %>
+                <option value="<%= department.idDepartamento %>"><%= department.nombre %></option>
+                <% } %>
+              </select>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="messages_with_icon_title">
+              <label class="mb-1" for="receiver">Escriba la dirección de correo electrónico:
+                <span class="required-field">*</span>
+              </label>
+              <div class="form-group">
+                <input type="text" id="receiver_email" class="form-control" placeholder="" />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <div class="float-left">
+            <button id="close-derivate-modal" class="btn btn-danger btn-round waves-effect" data-dismiss="modal">
+              Cancelar
+            </button>
+          </div>
+
+          <div class="float-right">
+            <button id="accept-derivation" class="btn btn-primary btn-round waves-effect">
+              Aceptar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <%- include('../partials/app/scripts', {view: ''}); %>
+
+  <script src="/assets/plugins/bootstrap-notify/bootstrap-notify.js"></script>
+  <script src="/assets/plugins/select2/select2.min.js"></script>
+  <script src="/assets/plugins/momentjs/moment.js"></script>
+  <script src="/assets/plugins/sweetalert/sweetalert.min.js"></script>
+  <script src="/light/assets/bundles/mainscripts.bundle.js"></script>
+
+  <script>
+    var request = JSON.parse(`<%- JSON.stringify(request) %>`);
+    var jwt = `<%= jwt %>`;
+    var idPersona = "<%= user.idPersona %>";
+    var today = moment(new Date()).format("DD/MM/YYYY");
+    var requestType = "<%= requestType %>";
+  </script>
+
+  <script src="/js/department-secretary/view-request.js" type="module"></script>
+</body>
+
+</html>

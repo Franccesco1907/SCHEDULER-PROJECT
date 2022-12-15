@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+  <head>
+    <%- include('../../partials/head', {title: 'Listado de Ciclos'}); %>
+    <link
+      rel="stylesheet"
+      href="/assets/plugins/jquery-datatable/dataTables.bootstrap4.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="/assets/plugins/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css"
+    />
+    <link rel="stylesheet" href="/assets/plugins/dropzone/dropzone.css" />
+
+    <link rel="stylesheet" href="/assets/plugins/select2/select2.css" />
+    <link rel="stylesheet" href="/assets/plugins/sweetalert/sweetalert.css" />
+    <link rel="stylesheet" href="/light/assets/css/main.css" />
+
+    <script
+      src="https://kit.fontawesome.com/c1c34b92ef.js"
+      crossorigin="anonymous"
+    ></script>
+
+    <style>
+      .matter-selected {
+        background-color: #fff8b5 !important;
+      }
+
+      .modal {
+        /*padding-top: 50px !important;*/
+      }
+    </style>
+  </head>
+
+  <body class="theme-purple">
+    <%- include('../../partials/app/header') %> <%-
+    include('../../partials/app/topbar'); %> <%-
+    include('../../partials/app/leftsidebar', {user}); %>
+
+    <section class="content">
+      <div class="block-header">
+        <div class="row">
+          <div class="col-lg-7 col-md-6 col-sm-12">
+            <h2>
+              Gestión de Ciclos
+              <small>Listado de Ciclos</small>
+            </h2>
+          </div>
+          <div class="col-lg-5 col-md-6 col-sm-12">
+            <ul class="breadcrumb float-md-right">
+              <li class="breadcrumb-item">
+                <a href="/"><i class="zmdi zmdi-home"></i>App</a>
+              </li>
+              <li class="breadcrumb-item"><a href="/">Gestión de Ciclos</a></li>
+              <li class="breadcrumb-item active" style="color: white">
+                Listado de Ciclos
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="container-fluid">
+        <!-- Exportable Table -->
+        <div class="row clearfix">
+          <div class="col-lg-12">
+            <div class="card">
+              <div class="header">
+                <div class="row pt-2">
+                  <div class="col-sm-12">
+                    <div class="float-right">
+                      <button
+                        id="delete-matter-modal"
+                        type="button"
+                        class="btn btn-danger waves-effect"
+                        data-color-name="alert-warning"
+                        data-toggle="modal"
+                      >
+                        Eliminar
+                      </button>
+                      <button
+                        id="edit-matter-modal"
+                        type="button"
+                        class="btn btn-info waves-effect"
+                        data-color-name="alert-warning"
+                        data-toggle="modal"
+                      >
+                        Editar
+                      </button>
+                      <a
+                        id="add-matter-modal"
+                        type="button"
+                        class="btn btn-primary waves-effect"
+                        style="color: white"
+                        data-toggle="modal"
+                        data-target="#addMatterModal"
+                      >
+                        Agregar
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="body">
+                <div class="table-responsive">
+                  <table
+                    id="cicles-data-table"
+                    class="
+                      table table-bordered table-striped table-hover
+                      dataTable
+                      js-exportable
+                    "
+                  >
+                    <thead style="background-color: #167bc3; color: white">
+                      <tr>
+                        <th>Nombre</th>
+                        <th>Fecha Incio</th>
+                        <th>Fecha Fin</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <!--back lo hace-->
+                    </tbody>
+                  </table>
+
+                  <div class="row clearfix">
+                    <div class="col-3">
+                      <input
+                        type="hidden"
+                        id="array-select"
+                        class="form-control"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- #END# Exportable Table -->
+      </div>
+    </section>
+
+    <div
+      class="modal fade show"
+      id="deleteMatterModal"
+      tabindex="-1"
+      role="dialog"
+      style="display: none"
+      aria-modal="true"
+    >
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header bg-red">
+            <h4 class="title pt-10">Deshabilitar Ciclo</h4>
+          </div>
+          <div class="modal-body">
+            ¿Estás seguro que quiere deshabilitar este ciclo?
+          </div>
+          <div class="modal-footer">
+            <div class="float-left">
+              <button
+                id="close-delete-matter-modal"
+                class="
+                  btn btn-danger btn-round
+                  waves-effect
+                  justify-content-center
+                "
+                data-dismiss="modal"
+              >
+                Cancelar
+              </button>
+            </div>
+
+            <div class="float-right">
+              <button
+                id="delete-matter"
+                class="
+                  btn btn-primary btn-round
+                  waves-effect
+                  justify-content-center
+                "
+              >
+                Deshabilitar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <button
+      id="activate-edit-modal"
+      data-toggle="modal"
+      data-target="#editMatterModal"
+      style="display: none"
+    ></button>
+
+    <div
+      class="modal fade show"
+      id="editMatterModal"
+      tabindex="-1"
+      role="dialog"
+      style="display: none"
+      aria-modal="true"
+    >
+      <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+        <div class="modal-content">
+          <div class="modal-header bg-blue">
+            <h4 class="title pt-10">Editar Ciclo</h4>
+          </div>
+
+          <div class="modal-body">
+            <label for="matter-name">Nombre del ciclo</label>
+            <div class="form-group">
+              <input
+                type="text"
+                name="matter-name"
+                class="form-control"
+                id="edit-cicle-name"
+                placeholder="Ingrese el nombre del asunto"
+                required
+              />
+            </div>
+            <label for="birthday">Fecha de Inicio</label>
+            <div class="input-group">
+              <span class="input-group-addon">
+                <i class="zmdi zmdi-calendar"></i>
+              </span>
+              <input
+                type="text"
+                class="form-control date"
+                id="iniDateEdit"
+                placeholder="Elija la fecha de inicio"
+                data-dtp="dtp_wghlr"
+              />
+            </div>
+            <label for="birthday">Fecha de Fin</label>
+            <div class="input-group">
+              <span class="input-group-addon">
+                <i class="zmdi zmdi-calendar"></i>
+              </span>
+              <input
+                type="text"
+                class="form-control date"
+                id="endDateEdit"
+                placeholder="Elija la fecha de fin"
+                data-dtp="dtp_wghlr"
+              />
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <div class="float-left">
+              <button
+                id="close-edit-matter-modal"
+                class="
+                  btn btn-danger btn-round
+                  waves-effect
+                  justify-content-center
+                "
+                data-dismiss="modal"
+              >
+                Cancelar
+              </button>
+            </div>
+
+            <div class="float-right">
+              <button
+                id="save-edit-matter-button"
+                class="
+                  btn btn-primary btn-round
+                  waves-effect
+                  justify-content-center
+                "
+              >
+                Guardar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="modal fade show"
+      id="addMatterModal"
+      tabindex="-1"
+      role="dialog"
+      style="display: none"
+      aria-modal="true"
+    >
+      <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+        <div class="modal-content">
+          <div class="modal-header bg-blue">
+            <h4 class="title pt-10">Agregar Ciclo</h4>
+          </div>
+
+          <div class="modal-body">
+            <label for="matter-name">Nombre del ciclo</label>
+            <div class="form-group">
+              <input
+                type="text"
+                name="matter-name"
+                class="form-control"
+                id="add-cicle-name"
+                placeholder="Ingrese el nombre del ciclo"
+                required
+              />
+            </div>
+            <label for="birthday">Fecha de Inicio</label>
+            <div class="input-group">
+              <span class="input-group-addon">
+                <i class="zmdi zmdi-calendar"></i>
+              </span>
+              <input
+                type="text"
+                class="form-control date"
+                id="iniDateAdd"
+                placeholder="Elija la fecha de inicio"
+                data-dtp="dtp_wghlr"
+              />
+            </div>
+            <label for="birthday">Fecha de Fin</label>
+            <div class="input-group">
+              <span class="input-group-addon">
+                <i class="zmdi zmdi-calendar"></i>
+              </span>
+              <input
+                type="text"
+                class="form-control date"
+                id="endDateAdd"
+                placeholder="Elija la fecha de fin"
+                data-dtp="dtp_wghlr"
+              />
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <div class="float-left">
+              <button
+                id="close-add-matter-modal"
+                class="
+                  btn btn-danger btn-round
+                  waves-effect
+                  justify-content-center
+                "
+                data-dismiss="modal"
+              >
+                Cancelar
+              </button>
+            </div>
+
+            <div class="float-right">
+              <button
+                id="save-new-cicle-button"
+                class="
+                  btn btn-primary btn-round
+                  waves-effect
+                  justify-content-center
+                "
+              >
+                Guardar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <button
+      id="open-preview-modal"
+      data-toggle="modal"
+      data-target="#previewDataModal"
+      style="display: none"
+    ></button>
+
+    <button
+      id="success-delete-matter"
+      class="btn btn-raised btn-primary waves-effect btn-round"
+      data-type="success"
+      style="display: none"
+    >
+      CLICK ME
+    </button>
+
+    <%- include('../../partials/app/scripts', {view: 'sb-cicle'}); %>
+
+    <script src="/light/assets/bundles/datatablescripts.bundle.js"></script>
+    <script src="/assets/plugins/jquery-datatable/buttons/dataTables.buttons.min.js"></script>
+    <script src="/assets/plugins/jquery-datatable/buttons/buttons.bootstrap4.min.js"></script>
+    <script src="/assets/plugins/jquery-datatable/buttons/buttons.colVis.min.js"></script>
+    <script src="/assets/plugins/jquery-datatable/buttons/buttons.html5.min.js"></script>
+    <script src="/assets/plugins/jquery-datatable/buttons/buttons.print.min.js"></script>
+    <script src="/assets/plugins/dropzone/dropzone.js"></script>
+
+    <script src="/assets/plugins/bootstrap-notify/bootstrap-notify.js"></script>
+    <script src="/assets/plugins/select2/select2.min.js"></script>
+    <script src="/light/assets/bundles/mainscripts.bundle.js"></script>
+    <script src="/assets/plugins/ion-rangeslider/js/ion.rangeSlider.js"></script>
+    <!-- RangeSlider Plugin Js -->
+    <script src="/assets/plugins/dropzone/dropzone.js"></script>
+    <script src="/assets/plugins/sweetalert/sweetalert.min.js"></script>
+    <script src="/assets/plugins/momentjs/moment.js"></script>
+    <script src="/assets/plugins/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js"></script>
+    <script
+      type="text/javascript"
+      src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"
+    ></script>
+
+    <script>
+      var jwt = "<%= jwt %>";
+    </script>
+
+    <script src="/js/user/admin/cicle.js" type="module"></script>
+  </body>
+</html>
